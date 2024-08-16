@@ -6,7 +6,13 @@ import os
 import sys
 import shutil
 import matplotlib.pyplot as plt
+from datetime import datetime
+import pytz
 
+def get_datetime():
+    tz = pytz.timezone('Asia/Seoul')
+    current_time = datetime.now(tz)
+    return current_time
 
 def draw_roc(frr_list, far_list, roc_auc):
   plt.switch_backend('agg')
