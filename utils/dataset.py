@@ -263,7 +263,7 @@ def get_dataset_one_to_one(src1_data, src1_train_num_frames,
 def get_dataset_ssl_clip(args, src1_data, src1_train_num_frames, src2_data,
                 src2_train_num_frames, src3_data, src3_train_num_frames,
                 src4_data, src4_train_num_frames, src5_data,
-                src5_train_num_frames, tgt_data, tgt_test_num_frames):
+                src5_train_num_frames, tgt_data, tgt_test_num_frames, collate_fn=None):
   print('Load Source Data')
   print('Source Data: ', src1_data)
   src1_train_data_fake = sample_frames(
@@ -349,6 +349,18 @@ def get_dataset_ssl_clip(args, src1_data, src1_train_num_frames, src2_data,
       drop_last=True)
 
   batch_size = args.t_batch_size
+
+  if collate_fn:
+        tgt_dataloader = DataLoader(
+            FASDatasetSSLCLIP(tgt_test_data, train=False),
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn)
+  else:
+        tgt_dataloader = DataLoader(
+            FASDatasetSSLCLIP(tgt_test_data, train=False),
+            batch_size=batch_size,
+            shuffle=False)
   tgt_dataloader = DataLoader(
       FASDatasetSSLCLIP(tgt_test_data, train=False),
       batch_size=batch_size,

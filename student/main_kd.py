@@ -52,6 +52,9 @@ def main(args):
     args.log_level = logging.DEBUG if args.debug else logging.INFO
     setup_logging(args.log_path, args.log_level)
 
+    args_info = "\n".join([f"{arg}: {getattr(args, arg)}" for arg in vars(args)])
+    logging.info(f"\n-----------------------------Arguments----------------------------|\n{args_info}\n")
+
 
     # Benchmark 1
     if args.config == 'I':

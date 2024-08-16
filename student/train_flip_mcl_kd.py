@@ -58,7 +58,6 @@ def train(config, args):
 
     valid_args = [np.inf, 0, 0, 0, 0, 0, 0, 0]
 
-
     loss_simclr = AverageMeter()
     loss_l2_euclid = AverageMeter()
     loss_total = AverageMeter()
@@ -73,9 +72,9 @@ def train(config, args):
     logging.info('\n----------------------------------------------- [START %s] %s' %
         (args.current_time.strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
     logging.info('** start training target model! **')
-    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss--------------|-----------------KD loss--------------|------ RKD loss ------|------ Current Best ------|--------------|')
-    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss    |    fd_loss    ckd_loss    affinity   |       rkd_loss       |   top-1   HTER    AUC    |     time     |')
-    logging.info('----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
+    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss--------------|----- RKD loss -----|-------- Current Best --------|--------------|')
+    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity   |      rkd_loss      |    top-1    HTER     AUC     |     time     |')
+    logging.info('-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
     
     start = timer()
     criterion = {'softmax': nn.CrossEntropyLoss().cuda()}
@@ -332,7 +331,7 @@ def train(config, args):
         sim_loss = criterion['softmax'](logits_ssl, labels_ssl) 
 
         fac = 1.0
-        total_loss = cls_loss + fac*sim_loss + fac*l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss
+        total_loss = cls_loss + fac*sim_loss + fac*l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss + rkd_loss
 
         total_loss.backward()
         if (iter_num+1) % accumulation_step == 0:
@@ -377,7 +376,7 @@ def train(config, args):
 
             print('\r', end='', flush=True)
             logging.info(
-                '  %4.1f |   %5.3f  %6.3f  %6.3f  %6.3f  |  %6.3f  %6.3f  |     %6.3f     %6.3f     %6.3f    |     %6.3f     %6.3f     %6.3f     |       %6.3f       |    %6.3f  %6.3f  %6.3f    | %s   %s'
+                '  %4.1f |   %5.3f  %6.3f  %6.3f  %6.3f  |  %6.3f  %6.3f  |     %6.3f      %6.3f      %6.3f     |     %6.3f     %6.3f     %6.3f     |       %6.3f       |    %6.3f  %6.3f  %6.3f    | %s   %s'
                 % ((iter_num + 1) / iter_per_epoch, 
                     valid_args[0], valid_args[6], valid_args[3] * 100, valid_args[4] * 100, 
                     loss_classifier.avg, classifer_top1.avg,
