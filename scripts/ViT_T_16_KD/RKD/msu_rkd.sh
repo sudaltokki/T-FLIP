@@ -17,7 +17,7 @@ torchrun --nproc_per_node 1 -m \
     --lr=0.001 \
     --wd=0.1 \
     --alpha_ckd_loss 0. \
-    --alpha_fd_loss 10. \
+    --alpha_fd_loss 0. \
     --alpha_affinity_loss 0. \
     --alpha_icl_loss 0.  \
     --dist_ratio  10. \

@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import argparse
-from datetime import datetime
+
 from timeit import default_timer as timer
 
 from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str
@@ -167,7 +167,7 @@ def train(config, args):
 
         # net1.train(True)
         optimizer.zero_grad()
-        
+
         ######### data prepare #########
         src1_img_real, src1_img_real_view_1, src1_img_real_view_2, src1_label_real = src1_train_iter_real.__next__()
         src1_img_real = src1_img_real.cuda()

@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import argparse
-from datetime import datetime
+
 from timeit import default_timer as timer
 
 from utils.utils import save_checkpoint, AverageMeter, Logger, accuracy, mkdirs, time_to_str
@@ -73,7 +73,7 @@ def train(config):
   log = Logger()
   log.write(
       '\n----------------------------------------------- [START %s] %s\n\n' %
-      (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
+      (args.current_time.strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
   log.write('** start training target model! **\n')
   log.write(
       '--------|------------- VALID -------------|--- classifier ---|----------------SimCLR loss-------------|------ Current Best ------|--------------|\n'

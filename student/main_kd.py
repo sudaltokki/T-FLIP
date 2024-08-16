@@ -5,7 +5,7 @@ import numpy as np
 import os
 import torch
 import torch.nn as nn
-from datetime import datetime
+
 
 from teacher.config import configC, configM, configI, configO, config_cefa, config_surf, config_wmca
 from teacher.config import config_CI, config_CO , config_CM, config_MC, config_MI, config_MO, config_IC, config_IO, config_IM, config_OC, config_OI, config_OM, custom
@@ -33,7 +33,7 @@ def main(args):
     # get the name of the experiments
     if args.name is None:
         args.name = '-'.join([
-            datetime.now().strftime("%Y_%m_%d-%H_%M_%S"),
+            args.current_time.strftime("%Y_%m_%d-%H_%M_%S"),
             f"t_model_{args.t_model}",
             f"s_model_{args.model}",
             f"lr_{args.lr}",
