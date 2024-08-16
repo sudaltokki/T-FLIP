@@ -22,4 +22,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_icl_loss 0.  \
     --dist_ratio  10. \
     --angle_ratio  20. \
-    --name "msu(b8,it8000)_rkd_lr0.001"
+    --name "msu(b8,it8000)_rkd_lr0.001"  \
+    --swin False

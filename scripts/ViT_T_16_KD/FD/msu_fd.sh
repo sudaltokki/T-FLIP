@@ -20,4 +20,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_fd_loss 10. \
     --alpha_affinity_loss 0. \
     --alpha_icl_loss 0.  \
-    --name "msu(b8,it4000)_fd10_lr0.001"
+    --name "msu(b8,it4000)_fd10_lr0.001"  \
+    --swin False

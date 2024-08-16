@@ -111,6 +111,11 @@ def parse_args(args):
         default=False,
         help="return probability and label in csv"
     )
+    parser.add_argument(
+        "--swin",
+        default=False,
+        help="use swin transformer instead of vit"
+    )
 
     
     parser.add_argument("--iterations", type=int, default=4000, help="Number of iterations to train for.")

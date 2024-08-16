@@ -20,4 +20,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0.00001 \
     --alpha_icl_loss 0.  \
-    --name "infer_casia"
+    --name "infer_casia"  \
+    --swin False

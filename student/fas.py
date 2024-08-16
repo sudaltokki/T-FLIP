@@ -15,6 +15,8 @@ from teacher.prompt_templates import spoof_templates, real_templates
 from collections import OrderedDict
 from clip.model import CLIP
 
+from utils.loss import HardDarkRank, RkdDistance, RKdAngle, L2Triplet, AttentionTransfer
+
 
 
 def l2_norm(input, axis=1):
@@ -528,10 +530,23 @@ class flip_mcl(nn.Module):
         ckd_loss = self.args.alpha_ckd_loss * ckd_loss
         affinity_loss = self.args.alpha_affinity_loss * affinity_loss
         icl_loss = self.args.alpha_icl_loss * icl_loss
-        #----------------------------------------------------------------------------------------------
 
-        
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, icl_loss
+        #----------------------------------------------------------------------------------------------
+        dist_criterion = RkdDistance()
+        angle_criterion = RKdAngle()
+        dark_criterion = HardDarkRank(alpha=self.args.dark_alpha, beta=self.args.dark_beta)
+        triplet_criterion = L2Triplet(sampler=self.args.triplet_sample(), margin=self.args.triplet_margin)
+        at_criterion = AttentionTransfer()
+
+        triplet_loss = self.args.triplet_ratio * triplet_criterion(image_features, source_labels)
+        dist_loss = self.args.dist_ratio * dist_criterion(image_features, t_image_features)
+        angle_loss = self.args.angle_ratio * angle_criterion(image_features, t_image_features)
+        dark_loss = self.args.dark_ratio * dark_criterion(image_features, t_image_features)
+        #at_loss = self.args.at_ratio * (at_criterion(b2, t_b2) + at_criterion(b3, t_b3) + at_criterion(b4, t_b4))
+        at_loss = 0
+        rkd_loss = triplet_loss + dist_loss + angle_loss + dark_loss + at_loss
+
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, icl_loss, rkd_loss
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class
