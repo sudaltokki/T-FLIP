@@ -6,7 +6,13 @@ import os
 import sys
 import shutil
 import matplotlib.pyplot as plt
+from datetime import datetime
+import pytz
 
+def get_datetime():
+    tz = pytz.timezone('Asia/Seoul')
+    current_time = datetime.now(tz)
+    return current_time
 
 def draw_roc(frr_list, far_list, roc_auc):
   plt.switch_backend('agg')
@@ -215,4 +221,17 @@ def zero_param_grad(params):
   for p in params:
     if p.grad is not None:
       p.grad.zero_()
+
+def pdist(e, squared=False, eps=1e-12):
+    e_square = e.pow(2).sum(dim=1)
+    prod = e @ e.t()
+    res = (e_square.unsqueeze(1) + e_square.unsqueeze(0) - 2 * prod).clamp(min=eps)
+
+    if not squared:
+        res = res.sqrt()
+
+    res = res.clone()
+    res[range(len(e)), range(len(e))] = 0
+    return res
+
 

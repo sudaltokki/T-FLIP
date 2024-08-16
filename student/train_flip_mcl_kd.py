@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import argparse
-from datetime import datetime
+
 from timeit import default_timer as timer
 
 from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str
@@ -58,7 +58,6 @@ def train(config, args):
 
     valid_args = [np.inf, 0, 0, 0, 0, 0, 0, 0]
 
-
     loss_simclr = AverageMeter()
     loss_l2_euclid = AverageMeter()
     loss_total = AverageMeter()
@@ -68,13 +67,14 @@ def train(config, args):
     loss_ckd = AverageMeter()
     loss_affinity = AverageMeter()
     loss_icl = AverageMeter()
+    loss_rkd = AverageMeter()
 
     logging.info('\n----------------------------------------------- [START %s] %s' %
-        (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
+        (args.current_time.strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
     logging.info('** start training target model! **')
-    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss--------------|-----------------KD loss--------------|------ Current Best ------|--------------|')
-    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss    |    fd_loss    ckd_loss    affinity   |   top-1   HTER    AUC    |    time      |')
-    logging.info('-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
+    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss--------------|----- RKD loss -----|-------- Current Best --------|--------------|')
+    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity   |      rkd_loss      |    top-1    HTER     AUC     |     time     |')
+    logging.info('-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
     
     start = timer()
     criterion = {'softmax': nn.CrossEntropyLoss().cuda()}
@@ -97,16 +97,18 @@ def train(config, args):
         iter_num_start = 0
         logging.info(f'Starting training from epoch {epoch} at iteration : {iter_num_start}' )
         
+    iteration = args.iterations
     iter_per_epoch = args.epochs
 
     optimizer_dict = [
         {
             'params': filter(lambda p: p.requires_grad, model.parameters()),
-            'lr': args.lr
+            'lr': args.lr,
+            'weight_decay': args.wd
         },
     ]
 
-    optimizer1 = optim.Adam(optimizer_dict, lr=0.000001, weight_decay=0.000001)
+    optimizer = optim.AdamW(optimizer_dict)
 
     src1_train_iter_real = iter(src1_train_dataloader_real)
     src1_iter_per_epoch_real = len(src1_train_iter_real)
@@ -134,7 +136,7 @@ def train(config, args):
 
   
 
-    for iter_num in range(iter_num_start, 4000 + 1):
+    for iter_num in range(iter_num_start, iteration + 1):
         if (iter_num % src1_iter_per_epoch_real == 0):
             src1_train_iter_real = iter(src1_train_dataloader_real)
         if (iter_num % src2_iter_per_epoch_real == 0):
@@ -163,7 +165,8 @@ def train(config, args):
             epoch = epoch + 1
 
         # net1.train(True)
-        optimizer1.zero_grad()
+        optimizer.zero_grad()
+
         ######### data prepare #########
         src1_img_real, src1_img_real_view_1, src1_img_real_view_2, src1_label_real = src1_train_iter_real.__next__()
         src1_img_real = src1_img_real.cuda()
@@ -318,17 +321,22 @@ def train(config, args):
                                     dim=0)
 
         ######### forward #########
+
+        #gradient accumulation
+        accumulation_step = int(args.total_batch_size / args.batch_size)
+
         # output image feature + text feature
-        classifier_label_out , logits_ssl, labels_ssl, l2_euclid_loss, fd_loss, ckd_loss, affinity_loss, icl_loss = model(input_data, input_data_view_1, input_data_view_2, source_label, True) # ce on I-T, SSL for image and l2 loss for image-view-text dot product
+        classifier_label_out , logits_ssl, labels_ssl, l2_euclid_loss, fd_loss, ckd_loss, affinity_loss, icl_loss, rkd_loss = model(input_data, input_data_view_1, input_data_view_2, source_label, True) # ce on I-T, SSL for image and l2 loss for image-view-text dot product
         cls_loss = criterion['softmax'](classifier_label_out.narrow(0, 0, input_data.size(0)), source_label)
         sim_loss = criterion['softmax'](logits_ssl, labels_ssl) 
 
         fac = 1.0
-        total_loss = cls_loss + fac*sim_loss + fac*l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss
+        total_loss = cls_loss + fac*sim_loss + fac*l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss + rkd_loss
 
         total_loss.backward()
-        optimizer1.step()
-        optimizer1.zero_grad()
+        if (iter_num+1) % accumulation_step == 0:
+            optimizer.step()
+            optimizer.zero_grad()
 
         loss_classifier.update(cls_loss.item())
         loss_l2_euclid.update(l2_euclid_loss.item())
@@ -338,6 +346,7 @@ def train(config, args):
         loss_ckd.update(ckd_loss.item())
         loss_affinity.update(affinity_loss.item())
         loss_icl.update(icl_loss.item())
+        loss_rkd.update(rkd_loss.item())
 
         acc = accuracy(
             classifier_label_out.narrow(0, 0, input_data.size(0)),
@@ -367,12 +376,12 @@ def train(config, args):
 
             print('\r', end='', flush=True)
             logging.info(
-                '  %4.1f  |  %5.3f  %6.3f  %6.3f  %6.3f  |  %6.3f  %6.3f  |     %6.3f     %6.3f     %6.3f     |     %6.3f     %6.3f     %6.3f     |  %6.3f  %6.3f  %6.3f  | %s   %s'
+                '  %4.1f |   %5.3f  %6.3f  %6.3f  %6.3f  |  %6.3f  %6.3f  |     %6.3f      %6.3f      %6.3f     |     %6.3f     %6.3f     %6.3f     |       %6.3f       |    %6.3f  %6.3f  %6.3f    | %s   %s'
                 % ((iter_num + 1) / iter_per_epoch, 
                     valid_args[0], valid_args[6], valid_args[3] * 100, valid_args[4] * 100, 
                     loss_classifier.avg, classifer_top1.avg,
                     loss_simclr.avg, loss_l2_euclid.avg, loss_total.avg,
-                    loss_fd.avg, loss_ckd.avg, loss_affinity.avg,
+                    loss_fd.avg, loss_ckd.avg, loss_affinity.avg, loss_rkd.avg,
                     float(best_model_ACC), float(best_model_HTER * 100), float(best_model_AUC * 100), time_to_str(timer() - start, 'min'), 0))
 
             time.sleep(0.01)

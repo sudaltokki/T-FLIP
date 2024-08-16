@@ -15,6 +15,8 @@ from teacher.prompt_templates import spoof_templates, real_templates
 from collections import OrderedDict
 from clip.model import CLIP
 
+from utils.loss import HardDarkRank, RkdDistance, RKdAngle, L2Triplet, AttentionTransfer
+
 
 
 def l2_norm(input, axis=1):
@@ -509,29 +511,62 @@ class flip_mcl(nn.Module):
             image_features = image_features / image_features.norm(dim=-1, keepdim=True)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True) 
 
-        fd_loss = F.mse_loss(image_features, t_image_features) + F.mse_loss(text_features, t_text_features)
+        fd_loss = torch.tensor(0.).cuda()
+        if self.args.alpha_fd_loss > 0:
+            fd_loss = F.mse_loss(image_features, t_image_features) + F.mse_loss(text_features, t_text_features)
+            fd_loss = self.args.alpha_fd_loss * fd_loss
 
         ckd_loss = torch.tensor(0.).cuda()
-        ckd_loss = (self.kl_loss(logits_per_image, t_logits_per_image.detach()) +\
-                    self.kl_loss(logits_per_text, t_logits_per_text.detach())) / 2
+        if self.args.alpha_ckd_loss > 0:
+            ckd_loss = (self.kl_loss(logits_per_image, t_logits_per_image.detach()) +\
+                        self.kl_loss(logits_per_text, t_logits_per_text.detach())) / 2
+            ckd_loss = self.args.alpha_ckd_loss * ckd_loss
 
         affinity_loss = torch.tensor(0.).cuda()
-        affinity_loss = (F.cross_entropy(logits_per_image, t_logits_per_image.detach()) +\
-                         F.cross_entropy(logits_per_text, t_logits_per_text.detach())) / 2
+        if self.args.alpha_affinity_loss > 0:
+            affinity_loss = (F.cross_entropy(logits_per_image, t_logits_per_image.detach()) +\
+                            F.cross_entropy(logits_per_text, t_logits_per_text.detach())) / 2
+            affinity_loss = self.args.alpha_affinity_loss * affinity_loss
         
         icl_loss = torch.tensor(0.).cuda()
         if self.args.alpha_icl_loss > 0:
             icl_loss = (F.cross_entropy(logits_per_s_image_to_t_text, labels) +\
                         F.cross_entropy(logits_per_s_text_to_t_image, labels)) / 2
+            icl_loss = self.args.alpha_icl_loss * icl_loss
 
-        fd_loss = self.args.alpha_fd_loss * fd_loss
-        ckd_loss = self.args.alpha_ckd_loss * ckd_loss
-        affinity_loss = self.args.alpha_affinity_loss * affinity_loss
-        icl_loss = self.args.alpha_icl_loss * icl_loss
         #----------------------------------------------------------------------------------------------
-
         
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, icl_loss
+        triplet_loss = torch.tensor(0.).cuda()
+        if self.args.triplet_ratio > 0 :
+            triplet_criterion = L2Triplet(sampler=self.args.triplet_sample(), margin=self.args.triplet_margin)
+            triplet_loss = self.args.triplet_ratio * triplet_criterion(image_features, source_labels)
+        
+        dist_loss = torch.tensor(0.).cuda()
+        if self.args.dist_ratio > 0 :
+            dist_criterion = RkdDistance()
+            dist_loss = (dist_criterion(image_features, t_image_features) + dist_criterion(text_features, t_text_features)) / 2
+            dist_loss = self.args.dist_ratio * dist_loss
+
+        angle_loss = torch.tensor(0.).cuda()
+        if self.args.angle_ratio > 0 :
+            angle_criterion = RKdAngle()
+            angle_loss = (angle_criterion(image_features, t_image_features) + angle_criterion(text_features, t_text_features)) / 2
+            angle_loss = self.args.angle_ratio * angle_loss
+
+        dark_loss = torch.tensor(0.).cuda()
+        if self.args.dark_ratio > 0 :
+            dark_criterion = HardDarkRank(alpha=self.args.dark_alpha, beta=self.args.dark_beta)
+            dark_loss = (dark_criterion(image_features, t_image_features) + dark_criterion(text_features, t_text_features))/2
+            dark_loss = self.args.dark_ratio * dark_loss
+
+        at_loss = torch.tensor(0.).cuda()
+        if self.args.at_ratio > 0 :
+            at_criterion = AttentionTransfer()
+            #at_loss = self.args.at_ratio * (at_criterion(b2, t_b2) + at_criterion(b3, t_b3) + at_criterion(b4, t_b4))
+
+        rkd_loss = triplet_loss + dist_loss + angle_loss + dark_loss + at_loss
+
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, icl_loss, rkd_loss
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class

@@ -12,7 +12,7 @@ import random
 import numpy as np
 from config import configC, configM, configI, configO, config_cefa, config_surf, config_wmca
 from config import config_CI, config_CO , config_CM, config_MC, config_MI, config_MO, config_IC, config_IO, config_IM, config_OC, config_OI, config_OM
-from datetime import datetime
+
 import time
 from timeit import default_timer as timer
 
@@ -71,7 +71,7 @@ def train(config):
   log = Logger()
   log.write(
       '\n----------------------------------------------- [START %s] %s\n\n' %
-      (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
+      (args.current_time.strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
   log.write('** start training target model! **\n')
   log.write(
       '--------|------------- VALID -------------|--- classifier ---|------ Current Best ------|--------------|\n'

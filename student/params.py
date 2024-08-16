@@ -1,5 +1,9 @@
 import argparse
 
+from utils.utils import get_datetime
+import utils.pairsampler as pair
+
+LookupChoices = type('', (argparse.Action, ), dict(__call__=lambda a, p, n, v, o: setattr(n, a.dest, a.choices[v])))
 
 def get_default_params(model_name):
     # Params from paper (https://arxiv.org/pdf/2103.00020.pdf)
@@ -114,14 +118,39 @@ def parse_args(args):
     )
 
     
+    parser.add_argument("--iterations", type=int, default=4000, help="Number of iterations to train for.")
     parser.add_argument("--epochs", type=int, default=32, help="Number of epochs to train for.")
     parser.add_argument("--lr", type=float, default=None, help="Learning rate.")
-    parser.add_argument("--batch_size", type=int, default=64, help="Batch size per GPU.")
+    parser.add_argument("--wd", type=float, default=None, help="Weight Decay")
+    parser.add_argument("--batch_size", type=int, default=8, help="Batch size per GPU.")
+    parser.add_argument("--total_batch_size", type=int, default=64, help="Batch size per GPU.")
     parser.add_argument("--t_batch_size", type=int, default=64, help="Batch size per GPU.")   
     parser.add_argument("--alpha_ckd_loss", type=float, default=0., help="CRD loss weight")
     parser.add_argument("--alpha_icl_loss", type=float, default=0., help="ICL_loss weight")
     parser.add_argument("--alpha_fd_loss", type=float, default=0., help="FD_loss weight")
     parser.add_argument("--alpha_affinity_loss", type=float, default=0., help="affinity loss weight")
+
+    parser.add_argument('--triplet_ratio', default=0, type=float)
+    parser.add_argument('--dist_ratio', default=0, type=float)
+    parser.add_argument('--angle_ratio', default=0, type=float)
+
+    parser.add_argument('--dark_ratio', default=0, type=float)
+    parser.add_argument('--dark_alpha', default=2, type=float)
+    parser.add_argument('--dark_beta', default=3, type=float)
+
+    parser.add_argument('--at_ratio', default=0, type=float)
+
+    parser.add_argument('--triplet_sample',
+                        choices=dict(random=pair.RandomNegative,
+                                    hard=pair.HardNegative,
+                                    all=pair.AllPairs,
+                                    semihard=pair.SemiHardNegative,
+                                    distance=pair.DistanceWeighted),
+                        default=pair.DistanceWeighted,
+                        action=LookupChoices)
+
+    parser.add_argument('--triplet_margin', type=float, default=0.2)
+    parser.add_argument("--current_time", type=float, default=get_datetime(), help="datetime in Seoul")
 
     args = parser.parse_args(args)
 
