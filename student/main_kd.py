@@ -13,6 +13,7 @@ from teacher.config import config_CI, config_CO , config_CM, config_MC, config_M
 from student.params import parse_args
 from student.train_flip_mcl_kd import train
 
+from utils.utils import set_wandb
 from utils.logger import setup_logging
 
 
@@ -115,6 +116,10 @@ def main(args):
     tpr_fpr_avg = []
     
     for i in range(5):
+
+        if args.set_wandb:
+            set_wandb(args, i)
+            
         # To reproduce results
         torch.manual_seed(i)
         np.random.seed(i)

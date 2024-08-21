@@ -235,7 +235,7 @@ def pdist(e, squared=False, eps=1e-12):
     res[range(len(e)), range(len(e))] = 0
     return res
 
-def set_wandb(args):
+def set_wandb(args, i):
     wandb_config= {
         "t_model": args.t_model,
         "model": args.model,
@@ -258,7 +258,7 @@ def set_wandb(args):
     wandb.init(
             # set the wandb project where this run will be logged
             project="tyrano",
-            name = f'{args.name}_{args.current_time.strftime("%Y_%m_%d-%H_%M_%S")}_{args.user}',
+            name = f'{args.name}_{args.current_time.strftime("%Y_%m_%d-%H_%M_%S")}_{args.user}_run{i}',
             # track hyperparameters and run metadata
             config= wandb_config
             )

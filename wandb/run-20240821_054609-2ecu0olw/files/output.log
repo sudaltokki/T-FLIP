@@ -33,3 +33,127 @@ TPR@FPR =  0.0
 TPR@FPR =  0.022058823529411766
 2024-08-21,14:57:21 | INFO |    2.0 |   1.058  53.497  46.442  56.189  |   0.465  77.445  |      4.197       0.007       7.419     |      0.000      0.000      0.000     |        2.750       |    53.497  46.442  56.189    |  0 hr 11 min   0
 /home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.029411764705882353
+2024-08-21,15:03:12 | INFO |    3.0 |   0.759  59.441  40.519  61.733  |   0.413  80.682  |      4.035       0.009       6.762     |      0.000      0.000      0.000     |        2.305       |    59.441  40.519  61.733    |  0 hr 17 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.051470588235294115
+2024-08-21,15:08:51 | INFO |    4.0 |   0.684  61.189  38.866  67.204  |   0.373  82.938  |      3.886       0.009       6.300     |      0.000      0.000      0.000     |        2.031       |    61.189  38.866  67.204    |  0 hr 22 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.051470588235294115
+2024-08-21,15:14:30 | INFO |    5.0 |   1.165  64.685  35.308  68.084  |   0.342  84.579  |      3.743       0.009       5.935     |      0.000      0.000      0.000     |        1.840       |    64.685  35.308  68.084    |  0 hr 28 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.09558823529411764
+2024-08-21,15:20:08 | INFO |    6.0 |   1.236  66.958  33.058  73.314  |   0.319  85.782  |      3.617       0.009       5.644     |      0.000      0.000      0.000     |        1.699       |    66.958  33.058  73.314    |  0 hr 33 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.11764705882352941
+2024-08-21,15:25:45 | INFO |    7.0 |   0.795  59.615  40.404  63.014  |   0.299  86.829  |      3.500       0.009       5.390     |      0.000      0.000      0.000     |        1.582       |    66.958  33.058  73.314    |  0 hr 39 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.007352941176470588
+2024-08-21,15:31:26 | INFO |    8.0 |   0.895  55.944  44.077  56.275  |   0.282  87.673  |      3.395       0.009       5.175     |      0.000      0.000      0.000     |        1.489       |    66.958  33.058  73.314    |  0 hr 45 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.058823529411764705
+2024-08-21,15:37:05 | INFO |    9.0 |   0.977  60.140  39.807  64.460  |   0.267  88.384  |      3.300       0.009       4.987     |      0.000      0.000      0.000     |        1.411       |    66.958  33.058  73.314    |  0 hr 50 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.04411764705882353
+2024-08-21,15:42:51 | INFO |   10.0 |   1.249  60.315  39.692  65.859  |   0.255  89.012  |      3.214       0.009       4.821     |      0.000      0.000      0.000     |        1.344       |    66.958  33.058  73.314    |  0 hr 56 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.007352941176470588
+2024-08-21,15:48:30 | INFO |   11.0 |   1.467  60.490  39.578  64.522  |   0.244  89.554  |      3.135       0.009       4.672     |      0.000      0.000      0.000     |        1.285       |    66.958  33.058  73.314    |  1 hr 02 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.014705882352941176
+2024-08-21,15:54:07 | INFO |   12.0 |   1.063  63.287  36.731  68.505  |   0.233  90.042  |      3.060       0.009       4.536     |      0.000      0.000      0.000     |        1.233       |    66.958  33.058  73.314    |  1 hr 07 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.11029411764705882
+2024-08-21,15:59:47 | INFO |   13.0 |   0.625  69.580  30.326  76.417  |   0.224  90.464  |      2.995       0.009       4.416     |      0.000      0.000      0.000     |        1.187       |    69.580  30.326  76.417    |  1 hr 13 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.11029411764705882
+2024-08-21,16:05:22 | INFO |   14.0 |   0.690  68.357  31.635  75.325  |   0.216  90.831  |      2.934       0.009       4.307     |      0.000      0.000      0.000     |        1.147       |    69.580  30.326  76.417    |  1 hr 19 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.04411764705882353
+2024-08-21,16:11:00 | INFO |   15.0 |   0.833  63.986  36.019  66.873  |   0.209  91.173  |      2.875       0.009       4.203     |      0.000      0.000      0.000     |        1.110       |    69.580  30.326  76.417    |  1 hr 24 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.15441176470588236
+2024-08-21,16:16:37 | INFO |   16.0 |   0.821  66.259  33.770  72.271  |   0.203  91.486  |      2.822       0.009       4.110     |      0.000      0.000      0.000     |        1.076       |    69.580  30.326  76.417    |  1 hr 30 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.08823529411764706
+2024-08-21,16:22:13 | INFO |   17.0 |   0.753  60.839  39.095  67.733  |   0.196  91.775  |      2.768       0.009       4.019     |      0.000      0.000      0.000     |        1.046       |    69.580  30.326  76.417    |  1 hr 36 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.0661764705882353
+2024-08-21,16:27:54 | INFO |   18.0 |   0.624  70.455  29.499  75.476  |   0.191  92.040  |      2.716       0.009       3.933     |      0.000      0.000      0.000     |        1.018       |    70.455  29.499  75.476    |  1 hr 41 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.11764705882352941
+2024-08-21,16:33:53 | INFO |   19.0 |   1.216  77.972  22.039  83.665  |   0.186  92.281  |      2.666       0.009       3.852     |      0.000      0.000      0.000     |        0.992       |    77.972  22.039  83.665    |  1 hr 47 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.08823529411764706
+2024-08-21,16:40:16 | INFO |   20.0 |   0.710  69.930  30.096  77.125  |   0.181  92.495  |      2.618       0.009       3.776     |      0.000      0.000      0.000     |        0.968       |    77.972  22.039  83.665    |  1 hr 54 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.2867647058823529
+2024-08-21,16:46:42 | INFO |   21.0 |   0.499  72.727  27.250  82.119  |   0.176  92.709  |      2.570       0.008       3.700     |      0.000      0.000      0.000     |        0.945       |    77.972  22.039  83.665    |  2 hr 00 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.125
+2024-08-21,16:53:06 | INFO |   22.0 |   0.879  65.385  34.596  68.072  |   0.172  92.909  |      2.525       0.008       3.630     |      0.000      0.000      0.000     |        0.925       |    77.972  22.039  83.665    |  2 hr 06 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.19852941176470587
+2024-08-21,16:59:32 | INFO |   23.0 |   0.706  74.126  25.826  81.412  |   0.168  93.090  |      2.483       0.008       3.565     |      0.000      0.000      0.000     |        0.906       |    77.972  22.039  83.665    |  2 hr 13 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.11029411764705882
+2024-08-21,17:06:06 | INFO |   24.0 |   0.742  76.224  23.691  83.518  |   0.164  93.257  |      2.442       0.008       3.502     |      0.000      0.000      0.000     |        0.887       |    77.972  22.039  83.665    |  2 hr 19 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.125
+2024-08-21,17:12:32 | INFO |   25.0 |   1.007  63.986  36.019  68.570  |   0.160  93.424  |      2.403       0.008       3.442     |      0.000      0.000      0.000     |        0.870       |    77.972  22.039  83.665    |  2 hr 26 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+TPR@FPR =  0.19117647058823528
+2024-08-21,17:18:59 | INFO |   26.0 |   1.057  74.825  25.115  82.473  |   0.157  93.581  |      2.365       0.008       3.383     |      0.000      0.000      0.000     |        0.854       |    77.972  22.039  83.665    |  2 hr 32 min   0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+Load Source Data
+Source Data:  oulu
+train fake: oulu 2758 0
+train real: oulu 0 613
+Source Data:  replay
+train fake: replay 673 0
+train real: replay 0 131
+Source Data:  msu
+train fake: msu 197 0
+train real: msu 0 70
+Source Data:  celeb
+train fake: celeb 39744 0
+train real: celeb 0 40000
+Source Data:  casia
+train fake: casia 20 0
+train real: casia 0 20
+Load Target Data
+Target Data:  casia
+test: casia 436 136
+2024-08-21,17:23:21 | INFO | Run,    HTER,    AUC,   TPR@FPR=1%
+2024-08-21,17:23:21 | INFO | 0,  22.038586076632487,  83.66500269832703,  11.76470588235294
+2024-08-21,17:23:21 | INFO |
+----------------------------------------------- [START 2024-08-21 14:46:08] ---------------------------------------------------
+2024-08-21,17:23:21 | INFO | ** start training target model! **
+2024-08-21,17:23:21 | INFO | --------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss--------------|----- RKD loss -----|-------- Current Best --------|--------------|
+2024-08-21,17:23:21 | INFO |   iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity   |      rkd_loss      |    top-1    HTER     AUC     |     time     |
+2024-08-21,17:23:21 | INFO | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

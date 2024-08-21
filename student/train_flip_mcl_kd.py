@@ -11,7 +11,7 @@ import wandb
 
 from timeit import default_timer as timer
 
-from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str, set_wandb
+from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str
 from utils.evaluate import eval
 from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_ssl_clip
 
@@ -25,9 +25,6 @@ device = 'cuda'
 
 
 def train(config, args):
-
-    if args.set_wandb:
-        set_wandb(args)
   
     # # # 5-shot
     # # src1_train_dataloader_fake, src1_train_dataloader_real, src2_train_dataloader_fake, src2_train_dataloader_real, src3_train_dataloader_fake, src3_train_dataloader_real, _, _, src5_train_dataloader_fake, src5_train_dataloader_real, test_dataloader = get_dataset_ssl_clip( # for wcs
