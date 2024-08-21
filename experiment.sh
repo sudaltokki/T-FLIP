@@ -3,7 +3,7 @@ torchrun --nproc_per_node 1 -m \
     student.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --t-model-checkpoint "/home/jiwon/FLIP-KD-Smod/student/t_ckpt/msu_flip_mcl.pth.tar"\
+    --t_model_checkpoint "/home/jiwon/FLIP-KD-Smod/student/t_ckpt/msu_flip_mcl.pth.tar"\
     --config M \
     --op_dir ckpt \
     --report_logger_path log \

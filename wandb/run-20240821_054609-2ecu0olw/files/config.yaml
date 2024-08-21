@@ -1,0 +1,84 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.13.7
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.7.12
+    start_time: 1724219169.315873
+    t:
+      1:
+      - 1
+      - 5
+      - 41
+      - 49
+      - 53
+      - 55
+      - 63
+      2:
+      - 1
+      - 5
+      - 41
+      - 49
+      - 53
+      - 55
+      - 63
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.7.12
+      5: 0.13.7
+      8:
+      - 5
+alpha_affinity_loss:
+  desc: null
+  value: 0.0
+alpha_ckd_loss:
+  desc: null
+  value: 0.0
+alpha_fd_loss:
+  desc: null
+  value: 0.0
+alpha_icl_loss:
+  desc: null
+  value: 0.0
+angle_ratio:
+  desc: null
+  value: 200.0
+batch:
+  desc: null
+  value: 8
+config:
+  desc: null
+  value: C
+dist_ratio:
+  desc: null
+  value: 100.0
+iterations:
+  desc: null
+  value: 8000
+lr:
+  desc: null
+  value: 0.001
+model:
+  desc: null
+  value: ViT-T-16
+swin:
+  desc: null
+  value: 'False'
+t_model:
+  desc: null
+  value: ViT-B-16
+t_model_checkpoint:
+  desc: null
+  value: /home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar
+user:
+  desc: null
+  value: jiwon
+wd:
+  desc: null
+  value: 0.1

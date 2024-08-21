@@ -1,0 +1,42 @@
+2024-08-21,14:27:10 | INFO |
+----------------------------------------------- [START 2024-08-21 14:27:08] ---------------------------------------------------
+2024-08-21,14:27:10 | INFO | ** start training target model! **
+2024-08-21,14:27:10 | INFO | --------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss--------------|----- RKD loss -----|-------- Current Best --------|--------------|
+2024-08-21,14:27:10 | INFO |   iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity   |      rkd_loss      |    top-1    HTER     AUC     |     time     |
+2024-08-21,14:27:10 | INFO | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+Load Source Data
+Source Data:  oulu
+train fake: oulu 2758 0
+train real: oulu 0 613
+Source Data:  replay
+train fake: replay 673 0
+train real: replay 0 131
+Source Data:  msu
+train fake: msu 197 0
+train real: msu 0 70
+Source Data:  celeb
+train fake: celeb 39744 0
+train real: celeb 0 40000
+Source Data:  casia
+train fake: casia 20 0
+train real: casia 0 20
+Load Target Data
+Target Data:  casia
+test: casia 436 136
+2024-08-21,14:27:12 | INFO | Starting training from epoch 1 at iteration : 0
+/home/jiwon/anaconda3/envs/fas/lib/python3.7/site-packages/torch/nn/_reduction.py:13: UserWarning: reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.
+  warnings.warn("reduction='elementwise_mean' is deprecated, please use reduction='mean' instead.")
+Traceback (most recent call last):
+  File "/home/jiwon/anaconda3/envs/fas/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/home/jiwon/anaconda3/envs/fas/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP/student/main_kd.py", line 146, in <module>
+    main(sys.argv[1:])
+  File "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP/student/main_kd.py", line 125, in main
+    hter, auc, tpr_fpr = train(config, args)
+  File "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP/student/train_flip_mcl_kd.py", line 363, in train
+    valid_args = eval(test_dataloader, model, True)
+  File "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP/utils/evaluate.py", line 40, in eval
+    cls_out, _ = model.forward_eval(input, norm_flag) # for SSL-CLIP model
+ValueError: too many values to unpack (expected 2)

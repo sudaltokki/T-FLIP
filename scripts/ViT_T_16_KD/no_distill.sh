@@ -1,5 +1,5 @@
 torchrun --nproc_per_node 1 -m \
-    --master_addr=127.0.0.2 --master_port=29491 \
+    --master_addr=127.0.0.2 --master_port=29155 \
     student.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
@@ -9,7 +9,7 @@ torchrun --nproc_per_node 1 -m \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
-    --iterations 4000 \
+    --iterations 8000 \
     --epochs 300 \
     --batch_size 8 \
     --total_batch_size 8 \
@@ -17,10 +17,12 @@ torchrun --nproc_per_node 1 -m \
     --lr=0.001 \
     --wd=0.1 \
     --alpha_ckd_loss 0. \
-    --alpha_fd_loss 10. \
-    --alpha_affinity_loss 0.00001 \
+    --alpha_fd_loss 0. \
+    --alpha_affinity_loss 0. \
     --alpha_icl_loss 0.  \
-    --name "msu(b8,it4000)_fd10+am0.00001_lr0.001"  \
+    --dist_ratio  0. \
+    --angle_ratio  0. \
+    --name "vit_msu(b8,it8000)_nodistill_lr0.001"  \
     --swin False \
     --set_wandb True \
     --user jiwon

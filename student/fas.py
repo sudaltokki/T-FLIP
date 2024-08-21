@@ -600,7 +600,41 @@ class flip_mcl(nn.Module):
         logits_per_image = logit_scale * image_features @ text_features.t()
 
         similarity = logits_per_image
-        return similarity, None
+        return similarity
+    
+    def forward_tsne(self, input, norm_flag=True):
+        # single text prompt per class
+        # logits_per_image, logits_per_text = self.model(input, self.text_inputs)
+
+        # Ensemble of text features
+        ensemble_weights = []
+        for classname in (['spoof', 'real']):
+            if classname == 'spoof':
+                texts = spoof_templates #format with spoof class
+            elif classname == 'real':
+                texts = real_templates #format with real class
+            
+            texts = clip.tokenize(texts).cuda() #tokenize
+            class_embeddings = self.model.encode_text(texts) #embed with text encoder
+            class_embedding = class_embeddings.mean(dim=0)
+            ensemble_weights.append(class_embedding)
+        text_features = torch.stack(ensemble_weights, dim=0).cuda()
+
+        # get the image features
+        image_features = self.model.encode_image(input)
+        if self.args.swin == True:
+            batch_size, h, w, c = image_features.shape
+            image_features = image_features.view(batch_size, h * w, c)
+        # normalized features
+        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+
+        # cosine similarity as logits
+        logit_scale = self.model.logit_scale.exp()
+        logits_per_image = logit_scale * image_features @ text_features.t()
+
+        similarity = logits_per_image
+        return image_features, text_features
 
 
     def forward_vis(self, input, norm_flag=True):

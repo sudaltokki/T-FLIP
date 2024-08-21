@@ -1,0 +1,253 @@
+{
+    "os": "Linux-5.15.0-117-generic-x86_64-with-debian-bookworm-sid",
+    "python": "3.7.12",
+    "heartbeatAt": "2024-08-21T05:27:09.576578",
+    "startedAt": "2024-08-21T05:27:08.934413",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--t_model",
+        "ViT-B-16",
+        "--model",
+        "ViT-T-16",
+        "--t_model_checkpoint",
+        "/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar",
+        "--config",
+        "C",
+        "--op_dir",
+        "ckpt",
+        "--report_logger_path",
+        "log",
+        "--root",
+        "/nas/dataset/FLIP_Dataset/MCIO/frame/",
+        "--dataroot",
+        "/nas/dataset/FLIP_Dataset/MCIO/txt/",
+        "--iterations",
+        "8000",
+        "--epochs",
+        "300",
+        "--batch_size",
+        "8",
+        "--total_batch_size",
+        "8",
+        "--t_batch_size",
+        "30",
+        "--lr=0.001",
+        "--wd=0.1",
+        "--alpha_ckd_loss",
+        "0.",
+        "--alpha_fd_loss",
+        "0.",
+        "--alpha_affinity_loss",
+        "0.",
+        "--alpha_icl_loss",
+        "0.",
+        "--dist_ratio",
+        "100.",
+        "--angle_ratio",
+        "200.",
+        "--name",
+        "casia(b8,it8000)_rkd_lr0.001",
+        "--swin",
+        "False",
+        "--set_wandb",
+        "True",
+        "--user",
+        "jiwon"
+    ],
+    "state": "running",
+    "program": "-m student.main_kd",
+    "git": {
+        "remote": "https://github.com/sudaltokki/Tyrano-CLIP.git",
+        "commit": "bb452a3f4f1ea4a3ba614dc11def31ca11e58f89"
+    },
+    "email": "mary000605@ewha.ac.kr",
+    "root": "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP",
+    "host": "ewha-acpl4",
+    "username": "jiwon",
+    "executable": "/home/jiwon/anaconda3/envs/fas/bin/python3.7",
+    "cpu_count": 24,
+    "cpu_count_logical": 32,
+    "cpu_freq": {
+        "current": 1971.9006875,
+        "min": 800.0,
+        "max": 4787.5
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5600.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5600.0
+        },
+        {
+            "current": 1100.822,
+            "min": 800.0,
+            "max": 5600.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5600.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 5300.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        },
+        {
+            "current": 2000.0,
+            "min": 800.0,
+            "max": 4200.0
+        }
+    ],
+    "disk": {
+        "total": 913.3173141479492,
+        "used": 358.3402442932129
+    },
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4090",
+            "memory_total": 25757220864
+        }
+    ],
+    "memory": {
+        "total": 62.626930236816406
+    }
+}

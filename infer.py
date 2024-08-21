@@ -14,6 +14,7 @@ from teacher.config import config_CI, config_CO , config_CM, config_MC, config_M
 from datetime import datetime
 import time
 from timeit import default_timer as timer
+from torch.autograd import Variable
 import os
 import torch
 import torch.nn as nn
