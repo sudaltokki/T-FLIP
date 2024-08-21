@@ -116,7 +116,6 @@ def infer(config, args):
             for iter, (input, target, videoID, name) in enumerate(data_loader):
                 input = input.cuda()
                 target = torch.from_numpy(np.array(target)).long().cuda()
-                print(target)
 
                 # forward_tsne로 image 및 text features 추출
                 image_features, text_features = model.forward_tsne(input, True)

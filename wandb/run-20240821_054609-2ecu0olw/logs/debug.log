@@ -24,3 +24,15 @@ config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/hom
 2024-08-21 05:46:10,998 INFO    MainThread:227425 [wandb_run.py:_redirect():1909] Wrapping output streams.
 2024-08-21 05:46:10,998 INFO    MainThread:227425 [wandb_run.py:_redirect():1931] Redirects installed.
 2024-08-21 05:46:10,999 INFO    MainThread:227425 [wandb_init.py:init():765] run started, returning control to user process
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Configure stats pid to 227425
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/.config/wandb/settings
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/settings
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2024-08-21 08:23:21,041 WARNING MainThread:227425 [wandb_setup.py:_flush():68] Could not find program at -m student.main_kd
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m student.main_kd'}
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:_log_setup():476] Logging user logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_082321-2rz849mo/logs/debug.log
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:_log_setup():477] Logging internal logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_082321-2rz849mo/logs/debug-internal.log
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:init():516] calling init triggers
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
+2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:init():564] wandb.init() called when a run is still active
