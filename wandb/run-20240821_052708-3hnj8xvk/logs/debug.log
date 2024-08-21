@@ -1,0 +1,27 @@
+2024-08-21 05:27:08,936 INFO    MainThread:226438 [wandb_setup.py:_flush():68] Configure stats pid to 226438
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/.config/wandb/settings
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/settings
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2024-08-21 05:27:08,937 WARNING MainThread:226438 [wandb_setup.py:_flush():68] Could not find program at -m student.main_kd
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m student.main_kd'}
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:_log_setup():476] Logging user logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/logs/debug.log
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:_log_setup():477] Logging internal logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/logs/debug-internal.log
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:init():516] calling init triggers
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:init():569] starting backend
+2024-08-21 05:27:08,937 INFO    MainThread:226438 [wandb_init.py:init():573] setting up manager
+2024-08-21 05:27:08,940 INFO    MainThread:226438 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-08-21 05:27:08,941 INFO    MainThread:226438 [wandb_init.py:init():580] backend started and connected
+2024-08-21 05:27:08,942 INFO    MainThread:226438 [wandb_init.py:init():658] updated telemetry
+2024-08-21 05:27:08,956 INFO    MainThread:226438 [wandb_init.py:init():694] communicating run to backend with 60 second timeout
+2024-08-21 05:27:09,434 INFO    MainThread:226438 [wandb_run.py:_on_init():2006] communicating current version
+2024-08-21 05:27:09,497 INFO    MainThread:226438 [wandb_run.py:_on_init():2010] got version response upgrade_message: "wandb version 0.17.7 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-08-21 05:27:09,497 INFO    MainThread:226438 [wandb_init.py:init():728] starting run threads in backend
+2024-08-21 05:27:10,592 INFO    MainThread:226438 [wandb_run.py:_console_start():1986] atexit reg
+2024-08-21 05:27:10,593 INFO    MainThread:226438 [wandb_run.py:_redirect():1844] redirect: SettingsConsole.WRAP_RAW
+2024-08-21 05:27:10,593 INFO    MainThread:226438 [wandb_run.py:_redirect():1909] Wrapping output streams.
+2024-08-21 05:27:10,593 INFO    MainThread:226438 [wandb_run.py:_redirect():1931] Redirects installed.
+2024-08-21 05:27:10,593 INFO    MainThread:226438 [wandb_init.py:init():765] run started, returning control to user process
+2024-08-21 05:32:48,723 WARNING MsgRouterThr:226438 [router.py:message_loop():77] message_loop has been closed

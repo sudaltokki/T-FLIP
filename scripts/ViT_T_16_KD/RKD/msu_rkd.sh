@@ -3,7 +3,7 @@ torchrun --nproc_per_node 1 -m \
     student.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --t-model-checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
     --config M \
     --op_dir ckpt \
     --report_logger_path log \
@@ -23,4 +23,6 @@ torchrun --nproc_per_node 1 -m \
     --dist_ratio  10. \
     --angle_ratio  20. \
     --name "msu(b8,it8000)_rkd_lr0.001"  \
-    --swin False
+    --swin False \
+    --set_wandb True \
+    --user jiwon

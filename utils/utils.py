@@ -8,6 +8,7 @@ import shutil
 import matplotlib.pyplot as plt
 from datetime import datetime
 import pytz
+import wandb
 
 def get_datetime():
     tz = pytz.timezone('Asia/Seoul')
@@ -234,4 +235,30 @@ def pdist(e, squared=False, eps=1e-12):
     res[range(len(e)), range(len(e))] = 0
     return res
 
-
+def set_wandb(args):
+    wandb_config= {
+        "t_model": args.t_model,
+        "model": args.model,
+        "t_model_checkpoint": args.t_model_checkpoint,
+        "alpha_ckd_loss": args.alpha_ckd_loss,
+        "alpha_fd_loss": args.alpha_fd_loss,
+        "alpha_affinity_loss": args.alpha_affinity_loss,
+        "alpha_icl_loss": args.alpha_icl_loss,
+        "dist_ratio": args.dist_ratio,
+        "angle_ratio": args.angle_ratio,
+        "batch": args.batch_size,
+        "iterations": args.iterations,
+        "config": args.config,
+        "lr": args.lr,
+        "wd": args.wd,
+        "swin": args.swin,
+        "user": args.user,
+        }
+    
+    wandb.init(
+            # set the wandb project where this run will be logged
+            project="tyrano",
+            name = f'{args.name}_{args.current_time.strftime("%Y_%m_%d-%H_%M_%S")}_{args.user}',
+            # track hyperparameters and run metadata
+            config= wandb_config
+            )

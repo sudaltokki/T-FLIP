@@ -6,10 +6,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import argparse
+import wandb
 
 from timeit import default_timer as timer
 
-from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str
+from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to_str, set_wandb
 from utils.evaluate import eval
 from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_ssl_clip
 
@@ -23,6 +24,9 @@ device = 'cuda'
 
 
 def train(config, args):
+
+    if args.set_wandb:
+        set_wandb(args)
   
     # # # 5-shot
     # # src1_train_dataloader_fake, src1_train_dataloader_real, src2_train_dataloader_fake, src2_train_dataloader_real, src3_train_dataloader_fake, src3_train_dataloader_real, _, _, src5_train_dataloader_fake, src5_train_dataloader_real, test_dataloader = get_dataset_ssl_clip( # for wcs
@@ -385,5 +389,7 @@ def train(config, args):
                     float(best_model_ACC), float(best_model_HTER * 100), float(best_model_AUC * 100), time_to_str(timer() - start, 'min'), 0))
 
             time.sleep(0.01)
+            if args.set_wandb:
+                wandb.log({'SimCLR-loss' : loss_simclr.avg, 'l2-loss' : loss_l2_euclid.avg, 'total-loss': loss_total.avg, 'fd_loss': loss_fd.avg, 'ckd_loss': loss_ckd.avg, 'affinity_loss':loss_affinity.avg, 'rkd_loss': loss_rkd.avg, 'valid_loss': valid_args[0], 'top-1':valid_args[6], 'HTER':valid_args[3] * 100, 'AUC':valid_args[4] * 100, 'classifier_loss':loss_classifier.avg, 'classifier_top1': classifer_top1.avg})
 
     return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0

@@ -29,7 +29,7 @@ def parse_args(args):
         help="Name of the vision backbone to use.",
     )
     parser.add_argument(
-        "--t-model-checkpoint",
+        "--t_model_checkpoint",
         type=str,
         default="RN50",
         help="teacher checkpoint path",
@@ -151,6 +151,10 @@ def parse_args(args):
 
     parser.add_argument('--triplet_margin', type=float, default=0.2)
     parser.add_argument("--current_time", type=float, default=get_datetime(), help="datetime in Seoul")
+
+    # wandb
+    parser.add_argument("--set_wandb", type=bool, default=True, help="wandb")
+    parser.add_argument("--user", type=str, default="", help="user name")
 
     args = parser.parse_args(args)
 

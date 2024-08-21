@@ -3,7 +3,7 @@ torchrun --nproc_per_node 1 -m \
     student.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --t-model-checkpoint "/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar"\
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar"\
     --config C \
     --op_dir ckpt \
     --report_logger_path log \
@@ -21,4 +21,6 @@ torchrun --nproc_per_node 1 -m \
     --alpha_affinity_loss 0.00001 \
     --alpha_icl_loss 0.  \
     --name "casia(b8,it4000)_fd10+am0.00001_lr0.001"  \
-    --swin False
+    --swin False \
+    --set_wandb True \
+    --user jiwon

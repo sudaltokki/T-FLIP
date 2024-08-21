@@ -82,7 +82,7 @@ sh experiment.sh
 You can modify the parameter values in `experiment.sh`
 
 ```bash
---t-model-checkpoint "/home/jiwon/FLIP-KD/student/t_ckpt/msu_flip_mcl.pth.tar" \
+--t_model_checkpoint "/home/jiwon/FLIP-KD/student/t_ckpt/msu_flip_mcl.pth.tar" \
 --config custom \
 --op_dir ckpt \
 --report_logger_path logs \

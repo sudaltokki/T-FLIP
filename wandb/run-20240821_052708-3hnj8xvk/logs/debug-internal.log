@@ -1,0 +1,224 @@
+2024-08-21 05:27:08,943 INFO    StreamThr :226490 [internal.py:wandb_internal():90] W&B internal server running at pid: 226490, started at: 2024-08-21 05:27:08.942477
+2024-08-21 05:27:08,945 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: status
+2024-08-21 05:27:08,947 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: status
+2024-08-21 05:27:08,948 DEBUG   SenderThread:226490 [sender.py:send():303] send: header
+2024-08-21 05:27:08,948 INFO    WriterThread:226490 [datastore.py:open_for_write():75] open: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/run-3hnj8xvk.wandb
+2024-08-21 05:27:08,956 DEBUG   SenderThread:226490 [sender.py:send():303] send: run
+2024-08-21 05:27:09,439 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: check_version
+2024-08-21 05:27:09,441 INFO    SenderThread:226490 [dir_watcher.py:__init__():216] watching files in: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files
+2024-08-21 05:27:09,442 INFO    SenderThread:226490 [sender.py:_start_run_threads():931] run started: 3hnj8xvk with start time 1724218028.941218
+2024-08-21 05:27:09,442 DEBUG   SenderThread:226490 [sender.py:send():303] send: summary
+2024-08-21 05:27:09,442 INFO    SenderThread:226490 [sender.py:_save_file():1171] saving file wandb-summary.json with policy end
+2024-08-21 05:27:09,442 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: check_version
+2024-08-21 05:27:09,506 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: run_start
+2024-08-21 05:27:09,536 DEBUG   HandlerThread:226490 [system_info.py:__init__():31] System info init
+2024-08-21 05:27:09,537 DEBUG   HandlerThread:226490 [system_info.py:__init__():46] System info init done
+2024-08-21 05:27:09,537 INFO    HandlerThread:226490 [system_monitor.py:start():150] Starting system monitor
+2024-08-21 05:27:09,537 INFO    SystemMonitor:226490 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2024-08-21 05:27:09,538 INFO    SystemMonitor:226490 [interfaces.py:start():168] Started cpu
+2024-08-21 05:27:09,538 INFO    HandlerThread:226490 [system_monitor.py:probe():171] Collecting system info
+2024-08-21 05:27:09,539 INFO    SystemMonitor:226490 [interfaces.py:start():168] Started disk
+2024-08-21 05:27:09,541 INFO    SystemMonitor:226490 [interfaces.py:start():168] Started gpu
+2024-08-21 05:27:09,542 INFO    SystemMonitor:226490 [interfaces.py:start():168] Started memory
+2024-08-21 05:27:09,542 INFO    SystemMonitor:226490 [interfaces.py:start():168] Started network
+2024-08-21 05:27:09,576 DEBUG   HandlerThread:226490 [system_info.py:probe():195] Probing system
+2024-08-21 05:27:09,584 DEBUG   HandlerThread:226490 [system_info.py:_probe_git():180] Probing git
+2024-08-21 05:27:09,595 DEBUG   HandlerThread:226490 [system_info.py:_probe_git():188] Probing git done
+2024-08-21 05:27:09,595 DEBUG   HandlerThread:226490 [system_info.py:probe():241] Probing system done
+2024-08-21 05:27:09,595 DEBUG   HandlerThread:226490 [system_monitor.py:probe():180] {'os': 'Linux-5.15.0-117-generic-x86_64-with-debian-bookworm-sid', 'python': '3.7.12', 'heartbeatAt': '2024-08-21T05:27:09.576578', 'startedAt': '2024-08-21T05:27:08.934413', 'docker': None, 'cuda': None, 'args': ('--t_model', 'ViT-B-16', '--model', 'ViT-T-16', '--t_model_checkpoint', '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', '--config', 'C', '--op_dir', 'ckpt', '--report_logger_path', 'log', '--root', '/nas/dataset/FLIP_Dataset/MCIO/frame/', '--dataroot', '/nas/dataset/FLIP_Dataset/MCIO/txt/', '--iterations', '8000', '--epochs', '300', '--batch_size', '8', '--total_batch_size', '8', '--t_batch_size', '30', '--lr=0.001', '--wd=0.1', '--alpha_ckd_loss', '0.', '--alpha_fd_loss', '0.', '--alpha_affinity_loss', '0.', '--alpha_icl_loss', '0.', '--dist_ratio', '100.', '--angle_ratio', '200.', '--name', 'casia(b8,it8000)_rkd_lr0.001', '--swin', 'False', '--set_wandb', 'True', '--user', 'jiwon'), 'state': 'running', 'program': '-m student.main_kd', 'git': {'remote': 'https://github.com/sudaltokki/Tyrano-CLIP.git', 'commit': 'bb452a3f4f1ea4a3ba614dc11def31ca11e58f89'}, 'email': 'mary000605@ewha.ac.kr', 'root': '/home/jiwon/FLIP-KD-P2/Tyrano-CLIP', 'host': 'ewha-acpl4', 'username': 'jiwon', 'executable': '/home/jiwon/anaconda3/envs/fas/bin/python3.7', 'cpu_count': 24, 'cpu_count_logical': 32, 'cpu_freq': {'current': 1971.9006875, 'min': 800.0, 'max': 4787.5}, 'cpu_freq_per_core': [{'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5600.0}, {'current': 2000.0, 'min': 800.0, 'max': 5600.0}, {'current': 1100.822, 'min': 800.0, 'max': 5600.0}, {'current': 2000.0, 'min': 800.0, 'max': 5600.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 5300.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}, {'current': 2000.0, 'min': 800.0, 'max': 4200.0}], 'disk': {'total': 913.3173141479492, 'used': 358.3402442932129}, 'gpu': 'NVIDIA GeForce RTX 4090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 4090', 'memory_total': 25757220864}], 'memory': {'total': 62.626930236816406}}
+2024-08-21 05:27:09,596 INFO    HandlerThread:226490 [system_monitor.py:probe():181] Finished collecting system info
+2024-08-21 05:27:09,596 INFO    HandlerThread:226490 [system_monitor.py:probe():184] Publishing system info
+2024-08-21 05:27:09,596 DEBUG   HandlerThread:226490 [system_info.py:_save_pip():52] Saving list of pip packages installed into the current environment
+2024-08-21 05:27:09,596 DEBUG   HandlerThread:226490 [system_info.py:_save_pip():67] Saving pip packages done
+2024-08-21 05:27:09,596 DEBUG   HandlerThread:226490 [system_info.py:_save_conda():75] Saving list of conda packages installed into the current environment
+2024-08-21 05:27:10,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_created():275] file/dir created: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-summary.json
+2024-08-21 05:27:10,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_created():275] file/dir created: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/requirements.txt
+2024-08-21 05:27:10,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_created():275] file/dir created: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/conda-environment.yaml
+2024-08-21 05:27:10,587 DEBUG   HandlerThread:226490 [system_info.py:_save_conda():86] Saving conda packages done
+2024-08-21 05:27:10,588 INFO    HandlerThread:226490 [system_monitor.py:probe():186] Finished publishing system info
+2024-08-21 05:27:10,589 DEBUG   SenderThread:226490 [sender.py:send():303] send: files
+2024-08-21 05:27:10,589 INFO    SenderThread:226490 [sender.py:_save_file():1171] saving file wandb-metadata.json with policy now
+2024-08-21 05:27:10,593 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:27:10,593 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:27:10,901 DEBUG   SenderThread:226490 [sender.py:send():303] send: telemetry
+2024-08-21 05:27:11,230 INFO    Thread-16 :226490 [upload_job.py:push():143] Uploaded file /tmp/tmpkfu1gzmqwandb/1ouaz615-wandb-metadata.json
+2024-08-21 05:27:11,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/conda-environment.yaml
+2024-08-21 05:27:11,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_created():275] file/dir created: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log
+2024-08-21 05:27:11,442 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_created():275] file/dir created: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-metadata.json
+2024-08-21 05:27:13,443 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log
+2024-08-21 05:27:15,443 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log
+2024-08-21 05:27:25,903 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:27:25,903 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:27:40,448 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/config.yaml
+2024-08-21 05:27:41,222 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:27:41,222 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:27:56,461 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:27:56,461 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:28:09,542 DEBUG   SystemMonitor:226490 [system_monitor.py:_start():130] Starting system metrics aggregation loop
+2024-08-21 05:28:09,543 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:28:11,722 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:28:11,722 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:28:27,063 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:28:27,063 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:28:39,544 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:28:42,363 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:28:42,363 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:28:57,624 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:28:57,624 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:29:09,544 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:29:12,964 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:29:12,964 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:29:28,314 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:29:28,314 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:29:39,545 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:29:43,574 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:29:43,575 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:29:58,853 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:29:58,853 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:30:09,545 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:30:14,115 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:30:14,115 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:30:29,430 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:30:29,430 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:30:39,546 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:30:44,667 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:30:44,667 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:30:59,904 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:30:59,904 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:31:09,546 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:31:15,176 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:31:15,176 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:31:30,391 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:31:30,391 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:31:39,547 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:31:45,708 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:31:45,708 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:32:01,019 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:32:01,020 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:32:09,547 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:32:16,317 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:32:16,317 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:32:31,604 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: stop_status
+2024-08-21 05:32:31,604 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: stop_status
+2024-08-21 05:32:39,548 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:32:44,403 DEBUG   SenderThread:226490 [sender.py:send():303] send: exit
+2024-08-21 05:32:44,403 INFO    SenderThread:226490 [sender.py:send_exit():442] handling exit code: 1
+2024-08-21 05:32:44,404 INFO    SenderThread:226490 [sender.py:send_exit():444] handling runtime: 334
+2024-08-21 05:32:44,404 INFO    SenderThread:226490 [sender.py:_save_file():1171] saving file wandb-summary.json with policy end
+2024-08-21 05:32:44,404 INFO    SenderThread:226490 [sender.py:send_exit():450] send defer
+2024-08-21 05:32:44,405 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,405 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 0
+2024-08-21 05:32:44,405 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,405 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 0
+2024-08-21 05:32:44,406 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 1
+2024-08-21 05:32:44,406 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,406 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 1
+2024-08-21 05:32:44,406 INFO    HandlerThread:226490 [system_monitor.py:finish():160] Stopping system monitor
+2024-08-21 05:32:44,408 DEBUG   SystemMonitor:226490 [system_monitor.py:_start():137] Finished system metrics aggregation loop
+2024-08-21 05:32:44,408 DEBUG   SystemMonitor:226490 [system_monitor.py:_start():141] Publishing last batch of metrics
+2024-08-21 05:32:44,410 INFO    HandlerThread:226490 [interfaces.py:finish():175] Joined cpu
+2024-08-21 05:32:44,411 INFO    HandlerThread:226490 [interfaces.py:finish():175] Joined disk
+2024-08-21 05:32:44,456 INFO    HandlerThread:226490 [interfaces.py:finish():175] Joined gpu
+2024-08-21 05:32:44,456 INFO    HandlerThread:226490 [interfaces.py:finish():175] Joined memory
+2024-08-21 05:32:44,456 INFO    HandlerThread:226490 [interfaces.py:finish():175] Joined network
+2024-08-21 05:32:44,456 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,456 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 1
+2024-08-21 05:32:44,456 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 2
+2024-08-21 05:32:44,456 DEBUG   SenderThread:226490 [sender.py:send():303] send: stats
+2024-08-21 05:32:44,456 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,456 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 2
+2024-08-21 05:32:44,457 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,457 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 2
+2024-08-21 05:32:44,457 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 3
+2024-08-21 05:32:44,457 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,457 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 3
+2024-08-21 05:32:44,457 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,457 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 3
+2024-08-21 05:32:44,457 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 4
+2024-08-21 05:32:44,457 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,457 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 4
+2024-08-21 05:32:44,457 DEBUG   SenderThread:226490 [sender.py:send():303] send: summary
+2024-08-21 05:32:44,457 INFO    SenderThread:226490 [sender.py:_save_file():1171] saving file wandb-summary.json with policy end
+2024-08-21 05:32:44,458 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,458 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 4
+2024-08-21 05:32:44,458 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 5
+2024-08-21 05:32:44,458 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,458 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 5
+2024-08-21 05:32:44,458 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,458 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 5
+2024-08-21 05:32:44,458 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 6
+2024-08-21 05:32:44,458 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:44,458 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 6
+2024-08-21 05:32:44,458 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:44,458 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 6
+2024-08-21 05:32:44,516 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-summary.json
+2024-08-21 05:32:45,255 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 7
+2024-08-21 05:32:45,256 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:45,256 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 7
+2024-08-21 05:32:45,256 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:45,256 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 7
+2024-08-21 05:32:45,257 INFO    SenderThread:226490 [dir_watcher.py:finish():362] shutting down directory watcher
+2024-08-21 05:32:45,401 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: poll_exit
+2024-08-21 05:32:45,517 INFO    Thread-13 :226490 [dir_watcher.py:_on_file_modified():292] file/dir modified: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log
+2024-08-21 05:32:45,518 INFO    SenderThread:226490 [dir_watcher.py:finish():392] scan: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files
+2024-08-21 05:32:45,518 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-metadata.json wandb-metadata.json
+2024-08-21 05:32:45,518 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log output.log
+2024-08-21 05:32:45,519 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-summary.json wandb-summary.json
+2024-08-21 05:32:45,519 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/config.yaml config.yaml
+2024-08-21 05:32:45,525 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/conda-environment.yaml conda-environment.yaml
+2024-08-21 05:32:45,525 INFO    SenderThread:226490 [dir_watcher.py:finish():406] scan save: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/requirements.txt requirements.txt
+2024-08-21 05:32:45,526 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 8
+2024-08-21 05:32:45,526 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: poll_exit
+2024-08-21 05:32:45,527 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:45,528 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 8
+2024-08-21 05:32:45,549 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:45,549 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 8
+2024-08-21 05:32:45,549 INFO    SenderThread:226490 [file_pusher.py:finish():168] shutting down file pusher
+2024-08-21 05:32:46,134 INFO    Thread-17 :226490 [upload_job.py:push():143] Uploaded file /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/output.log
+2024-08-21 05:32:46,264 INFO    Thread-19 :226490 [upload_job.py:push():143] Uploaded file /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/config.yaml
+2024-08-21 05:32:46,274 INFO    Thread-18 :226490 [upload_job.py:push():143] Uploaded file /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/wandb-summary.json
+2024-08-21 05:32:46,312 INFO    Thread-21 :226490 [upload_job.py:push():143] Uploaded file /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/requirements.txt
+2024-08-21 05:32:46,356 INFO    Thread-20 :226490 [upload_job.py:push():143] Uploaded file /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/files/conda-environment.yaml
+2024-08-21 05:32:46,402 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: poll_exit
+2024-08-21 05:32:46,403 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: poll_exit
+2024-08-21 05:32:46,557 INFO    Thread-12 :226490 [sender.py:transition_state():463] send defer: 9
+2024-08-21 05:32:46,558 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:46,558 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 9
+2024-08-21 05:32:46,558 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:46,559 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 9
+2024-08-21 05:32:46,559 INFO    SenderThread:226490 [file_pusher.py:join():173] waiting for file pusher
+2024-08-21 05:32:46,559 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 10
+2024-08-21 05:32:46,560 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:46,560 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 10
+2024-08-21 05:32:46,560 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:46,560 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 10
+2024-08-21 05:32:47,264 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 11
+2024-08-21 05:32:47,265 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:47,265 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 11
+2024-08-21 05:32:47,265 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:47,265 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 11
+2024-08-21 05:32:47,265 INFO    SenderThread:226490 [sender.py:transition_state():463] send defer: 12
+2024-08-21 05:32:47,266 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: defer
+2024-08-21 05:32:47,266 INFO    HandlerThread:226490 [handler.py:handle_request_defer():162] handle defer: 12
+2024-08-21 05:32:47,267 DEBUG   SenderThread:226490 [sender.py:send():303] send: final
+2024-08-21 05:32:47,267 DEBUG   SenderThread:226490 [sender.py:send():303] send: footer
+2024-08-21 05:32:47,267 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: defer
+2024-08-21 05:32:47,268 INFO    SenderThread:226490 [sender.py:send_request_defer():459] handle sender defer: 12
+2024-08-21 05:32:47,269 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: poll_exit
+2024-08-21 05:32:47,270 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: poll_exit
+2024-08-21 05:32:47,271 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: poll_exit
+2024-08-21 05:32:47,272 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: poll_exit
+2024-08-21 05:32:47,274 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: server_info
+2024-08-21 05:32:47,274 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: get_summary
+2024-08-21 05:32:47,274 DEBUG   SenderThread:226490 [sender.py:send_request():317] send_request: server_info
+2024-08-21 05:32:47,278 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: sampled_history
+2024-08-21 05:32:47,718 INFO    MainThread:226490 [wandb_run.py:_footer_history_summary_info():3408] rendering history
+2024-08-21 05:32:47,718 INFO    MainThread:226490 [wandb_run.py:_footer_history_summary_info():3440] rendering summary
+2024-08-21 05:32:47,718 INFO    MainThread:226490 [wandb_run.py:_footer_sync_info():3364] logging synced files
+2024-08-21 05:32:47,719 DEBUG   HandlerThread:226490 [handler.py:handle_request():139] handle_request: shutdown
+2024-08-21 05:32:47,719 INFO    HandlerThread:226490 [handler.py:finish():814] shutting down handler
+2024-08-21 05:32:48,267 INFO    WriterThread:226490 [datastore.py:close():279] close: /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_052708-3hnj8xvk/run-3hnj8xvk.wandb
+2024-08-21 05:32:48,717 INFO    SenderThread:226490 [sender.py:finish():1331] shutting down sender
+2024-08-21 05:32:48,718 INFO    SenderThread:226490 [file_pusher.py:finish():168] shutting down file pusher
+2024-08-21 05:32:48,718 INFO    SenderThread:226490 [file_pusher.py:join():173] waiting for file pusher
+2024-08-21 05:32:48,723 INFO    MainThread:226490 [internal.py:handle_exit():77] Internal process exited

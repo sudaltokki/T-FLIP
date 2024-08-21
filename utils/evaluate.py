@@ -37,7 +37,7 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False):
 
       starttime = time.time()
       # cls_out, feature = model(input, norm_flag) # for FLIP-V and FLIP-IT model
-      cls_out, _ = model.forward_eval(input, norm_flag) # for SSL-CLIP model
+      cls_out = model.forward_eval(input, norm_flag) # for SSL-CLIP model
 
       prob = F.softmax(cls_out, dim=1).cpu().data.numpy()[:, 1]
       label = target.cpu().data.numpy()
