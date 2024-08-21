@@ -5,6 +5,7 @@ import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.optim.lr_scheduler import CosineAnnealingLR
 import argparse
 import wandb
 
@@ -104,16 +105,6 @@ def train(config, args):
     iteration = args.iterations
     iter_per_epoch = args.epochs
 
-    optimizer_dict = [
-        {
-            'params': filter(lambda p: p.requires_grad, model.parameters()),
-            'lr': args.lr,
-            'weight_decay': args.wd
-        },
-    ]
-
-    optimizer = optim.AdamW(optimizer_dict)
-
     src1_train_iter_real = iter(src1_train_dataloader_real)
     src1_iter_per_epoch_real = len(src1_train_iter_real)
     src2_train_iter_real = iter(src2_train_dataloader_real)
@@ -138,8 +129,27 @@ def train(config, args):
     # src5_train_iter_fake = iter(src5_train_dataloader_fake)
     # src5_iter_per_epoch_fake = len(src5_train_iter_fake)
 
-  
+    optimizer_dict = [
+        {
+            'params': filter(lambda p: p.requires_grad, model.parameters()),
+            'lr': args.lr,
+            'weight_decay': args.wd
+        },
+    ]
 
+    optimizer = optim.AdamW(optimizer_dict)
+
+    total_steps = min(
+    src1_iter_per_epoch_real, src1_iter_per_epoch_fake,
+    src2_iter_per_epoch_real, src2_iter_per_epoch_fake,
+    src3_iter_per_epoch_real, src3_iter_per_epoch_fake,
+    src4_iter_per_epoch_real, src4_iter_per_epoch_fake
+    )
+    total_steps = total_steps * iteration
+
+    scheduler = CosineAnnealingLR(optimizer, total_steps)
+
+  
     for iter_num in range(iter_num_start, iteration + 1):
         if (iter_num % src1_iter_per_epoch_real == 0):
             src1_train_iter_real = iter(src1_train_dataloader_real)
@@ -341,6 +351,7 @@ def train(config, args):
         if (iter_num+1) % accumulation_step == 0:
             optimizer.step()
             optimizer.zero_grad()
+            scheduler.step()
 
         loss_classifier.update(cls_loss.item())
         loss_l2_euclid.update(l2_euclid_loss.item())
