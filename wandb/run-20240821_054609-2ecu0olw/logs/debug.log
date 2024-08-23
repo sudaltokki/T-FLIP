@@ -36,3 +36,40 @@ config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/hom
 2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
 config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
 2024-08-21 08:23:21,041 INFO    MainThread:227425 [wandb_init.py:init():564] wandb.init() called when a run is still active
+2024-08-21 11:16:16,461 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Configure stats pid to 227425
+2024-08-21 11:16:16,461 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/.config/wandb/settings
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/settings
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2024-08-21 11:16:16,462 WARNING MainThread:227425 [wandb_setup.py:_flush():68] Could not find program at -m student.main_kd
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m student.main_kd'}
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_init.py:_log_setup():476] Logging user logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_111616-bjs5dob8/logs/debug.log
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_init.py:_log_setup():477] Logging internal logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_111616-bjs5dob8/logs/debug-internal.log
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_init.py:init():516] calling init triggers
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
+2024-08-21 11:16:16,462 INFO    MainThread:227425 [wandb_init.py:init():564] wandb.init() called when a run is still active
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Configure stats pid to 227425
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/.config/wandb/settings
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/settings
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2024-08-21 14:09:01,160 WARNING MainThread:227425 [wandb_setup.py:_flush():68] Could not find program at -m student.main_kd
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m student.main_kd'}
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_init.py:_log_setup():476] Logging user logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_140901-2olp0m6u/logs/debug.log
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_init.py:_log_setup():477] Logging internal logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_140901-2olp0m6u/logs/debug-internal.log
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_init.py:init():516] calling init triggers
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
+2024-08-21 14:09:01,160 INFO    MainThread:227425 [wandb_init.py:init():564] wandb.init() called when a run is still active
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Configure stats pid to 227425
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/.config/wandb/settings
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/settings
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2024-08-21 16:49:55,120 WARNING MainThread:227425 [wandb_setup.py:_flush():68] Could not find program at -m student.main_kd
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m student.main_kd'}
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_init.py:_log_setup():476] Logging user logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_164955-313j05xf/logs/debug.log
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_init.py:_log_setup():477] Logging internal logs to /home/jiwon/FLIP-KD-P2/Tyrano-CLIP/wandb/run-20240821_164955-313j05xf/logs/debug-internal.log
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_init.py:init():516] calling init triggers
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_init.py:init():520] wandb.init called with sweep_config: {}
+config: {'t_model': 'ViT-B-16', 'model': 'ViT-T-16', 't_model_checkpoint': '/home/jiwon/FLIP_T_ckpt/casia_flip_mcl.pth.tar', 'alpha_ckd_loss': 0.0, 'alpha_fd_loss': 0.0, 'alpha_affinity_loss': 0.0, 'alpha_icl_loss': 0.0, 'dist_ratio': 100.0, 'angle_ratio': 200.0, 'batch': 8, 'iterations': 8000, 'config': 'C', 'lr': 0.001, 'wd': 0.1, 'swin': 'False', 'user': 'jiwon'}
+2024-08-21 16:49:55,120 INFO    MainThread:227425 [wandb_init.py:init():564] wandb.init() called when a run is still active
+2024-08-21 19:19:05,893 WARNING MsgRouterThr:227425 [router.py:message_loop():77] message_loop has been closed

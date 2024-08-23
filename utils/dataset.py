@@ -552,3 +552,51 @@ def get_dataset(src1_data, src1_train_num_frames, src2_data,
   ]
 
   return data_loaders_list
+
+def get_dataset_for_tsne(args, src1_data, src1_train_num_frames, src2_data,
+                src2_train_num_frames, src3_data, src3_train_num_frames,
+                src4_data, src4_train_num_frames, collate_fn=None):
+  print('Load Source Data')
+  print('Source Data: ', src1_data)
+  src1_train_data = sample_frames(
+      args, flag=4, num_frames=src1_train_num_frames, dataset_name=src1_data)
+  print('Source Data: ', src2_data)
+  src2_train_data = sample_frames(
+      args, flag=4, num_frames=src2_train_num_frames, dataset_name=src2_data)
+  print('Source Data: ', src3_data)
+  src3_train_data = sample_frames(
+      args, flag=4, num_frames=src3_train_num_frames, dataset_name=src3_data)
+  print('Source Data: ', src4_data)
+  src4_train_data = sample_frames(
+      args, flag=4, num_frames=src4_train_num_frames, dataset_name=src4_data)
+
+  batch_size = args.t_batch_size
+  src1_train_dataloader = DataLoader(
+      FASDatasetSSLCLIP(src1_train_data, train=False),
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn)
+  src2_train_dataloader= DataLoader(
+      FASDatasetSSLCLIP(src2_train_data, train=False),
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn)
+  src3_train_dataloader = DataLoader(
+      FASDatasetSSLCLIP(src3_train_data, train=False),
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn)
+  src4_train_dataloader = DataLoader(
+      FASDatasetSSLCLIP(src4_train_data, train=False),
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn)
+
+
+  data_loaders_list = [ src1_train_dataloader,\
+         src2_train_dataloader,\
+         src3_train_dataloader,\
+         src4_train_dataloader,\
+  ]
+
+  return data_loaders_list
