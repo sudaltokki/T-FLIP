@@ -115,7 +115,7 @@ def main(args):
     auc_avg = []
     tpr_fpr_avg = []
     
-    for i in range(5):
+    for i in range(args.run):
 
         if args.set_wandb:
             set_wandb(args, i)

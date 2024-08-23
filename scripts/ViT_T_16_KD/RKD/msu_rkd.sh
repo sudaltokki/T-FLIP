@@ -11,6 +11,7 @@ torchrun --nproc_per_node 1 -m \
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
     --iterations 8000 \
     --epochs 300 \
+    --run 3 \
     --batch_size 8 \
     --total_batch_size 8 \
     --t_batch_size 30 \
