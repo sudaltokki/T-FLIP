@@ -120,6 +120,7 @@ def parse_args(args):
     
     parser.add_argument("--iterations", type=int, default=4000, help="Number of iterations to train for.")
     parser.add_argument("--epochs", type=int, default=32, help="Number of epochs to train for.")
+    parser.add_argument("--scheduler", type=str, default="", help="set scheduler")
     parser.add_argument("--lr", type=float, default=None, help="Learning rate.")
     parser.add_argument("--wd", type=float, default=None, help="Weight Decay")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size per GPU.")

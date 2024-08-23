@@ -144,7 +144,8 @@ def train(config, args):
     )
     total_steps = total_steps * iteration
 
-    scheduler = CosineAnnealingLR(optimizer, total_steps)
+    if args.scheduler == 'cosine':
+        scheduler = CosineAnnealingLR(optimizer, total_steps)
 
   
     for iter_num in range(iter_num_start, iteration + 1):
@@ -348,7 +349,8 @@ def train(config, args):
         if (iter_num+1) % accumulation_step == 0:
             optimizer.step()
             optimizer.zero_grad()
-            scheduler.step()
+            if args.scheduler == 'cosine':
+                scheduler.step()
 
         loss_classifier.update(cls_loss.item())
         loss_l2_euclid.update(l2_euclid_loss.item())
