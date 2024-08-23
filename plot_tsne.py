@@ -52,7 +52,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import importlib_metadata
 import umap
 
-def plot_tsne(features, dataset_labels, class_labels, datasets, type, num_classes=2):
+def plot_tsne(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
     """
     features: (N, D) shape의 feature embeddings
     dataset_labels: 각 embedding에 대한 데이터셋 레이블 (N,)
@@ -77,11 +77,13 @@ def plot_tsne(features, dataset_labels, class_labels, datasets, type, num_classe
             plt.scatter(features_2d[idx, 0], features_2d[idx, 1], color=colors(i * num_classes + j), label=label_name, alpha=0.6)
     
     plt.legend()
-    plt.title("t-SNE visualization of embeddings by Dataset and Class")
-    plt.savefig(f'tsne_{type}_features_visualization.png')
+    plt.suptitle("t-SNE visualization of embeddings by Dataset and Class")
+    plt.title(file_name)
+
+    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_{file_name}.png')
     plt.show()
 
-def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, num_classes=2):
+def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
     """
     features: (N, D) shape의 feature embeddings
     dataset_labels: 각 embedding에 대한 데이터셋 레이블 (N,)
@@ -91,7 +93,7 @@ def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, num_cla
     """
 
     # t-SNE 적용
-    tsne = TSNE(n_components=3, perplexity=50, random_state=42)
+    tsne = TSNE(n_components=3, perplexity=70, random_state=42)
     features_3d = tsne.fit_transform(features)
 
     # 3D 시각화
@@ -108,11 +110,14 @@ def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, num_cla
                        color=colors(i * num_classes + j), label=label_name, alpha=0.6)
 
     ax.legend()
+
     ax.set_title("t-SNE 3D visualization of embeddings by Dataset and Class")
-    plt.savefig(f'tsne_{type}_features_visualization_3d.png')
+    plt.title(file_name)
+
+    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_3d_{file_name}.png')
     plt.show()
 
-def plot_umap(features, dataset_labels, class_labels, datasets, type, num_classes=2):
+def plot_umap(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
     # UMAP 적용
     reducer = umap.UMAP(n_components=2, random_state=42)
     features_2d = reducer.fit_transform(features)
@@ -129,8 +134,11 @@ def plot_umap(features, dataset_labels, class_labels, datasets, type, num_classe
             plt.scatter(features_2d[idx, 0], features_2d[idx, 1], color=colors(i * num_classes + j), label=label_name, alpha=0.6)
     
     plt.legend()
-    plt.title("UMAP visualization of embeddings by Dataset and Class")
-    plt.savefig(f'umap_{type}_features_visualization.png')
+
+    plt.title(file_name)
+    plt.suptitle("UMAP visualization of embeddings by Dataset and Class")
+
+    plt.savefig(f'tsne_result/umap_{type}_features_visualization_{file_name}.png')
     plt.show()
 
 def infer(config, args):
@@ -190,11 +198,13 @@ def infer(config, args):
     dataset_labels_np = np.concatenate(dataset_labels_list, axis=0)
     class_labels_np = np.concatenate(class_labels_list, axis=0)
 
-    # t-SNE 시각화 (image_features와 text_features를 개별적으로 시각화할 수도 있습니다)
-    plot_tsne(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image')
-    plot_tsne_3d(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image')
-    #plot_umap(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image')
-    plot_tsne(text_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='text')
+    split_ckpt = args.ckpt.split('/')
+    file_name = split_ckpt[1]+'_'+split_ckpt[3].split('_')[3]+split_ckpt[3].split('_')[4]
+    
+    plot_tsne(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    plot_tsne_3d(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    #plot_umap(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    #plot_tsne(text_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='text', file_name=file_name)
         
     return 
 
