@@ -11,6 +11,23 @@ class Configs_tsne(object):
     gamma = 0.3
     beta = 0.5
 
+class Custom(object):
+    src1_data = 'oulu'
+    src1_train_num_frames = 1
+    src2_data = 'msu'
+    src2_train_num_frames = 1
+    src3_data = 'replay'
+    src3_train_num_frames = 1
+    src4_data = 'celeb'
+    src4_train_num_frames = 1
+    src5_data = 'oulu'
+    src5_train_num_frames = 1
+    tgt_data = 'oulu'
+    tgt_test_num_frames = 2
+    weight = 1
+    gamma = 0.3
+    beta = 0.5
+
 
 class DefaultConfigs_C(object):
     src1_data = 'oulu'
@@ -310,6 +327,7 @@ configC = DefaultConfigs_C()
 configI = DefaultConfigs_I()
 configM = DefaultConfigs_M()
 configO = DefaultConfigs_O()
+custom = Custom()
 configTSNE = Configs_tsne()
 
 config_cefa = DefaultConfigs_cefa()

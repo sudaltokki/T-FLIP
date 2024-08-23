@@ -3,8 +3,8 @@ torchrun --nproc_per_node 1 -m \
     student.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
-    --config M \
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/oulu_flip_mcl.pth.tar"\
+    --config O \
     --op_dir ckpt \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
@@ -21,9 +21,9 @@ torchrun --nproc_per_node 1 -m \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0. \
     --alpha_icl_loss 0.  \
-    --dist_ratio  10. \
-    --angle_ratio  20. \
-    --name "msu(b8,it8000)_rkd_lr0.001"  \
+    --dist_ratio  100. \
+    --angle_ratio  200. \
+    --name "oulu(b8,it8000,run3)_rkd_lr0.001"  \
     --swin False \
     --set_wandb True \
     --user jiwon

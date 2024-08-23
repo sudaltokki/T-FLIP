@@ -3,7 +3,7 @@ torchrun --nproc_per_node 1 -m \
     plot_tsne \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --ckpt "/home/jiwon/FLIP-KD-P2/Tyrano-CLIP/log/msu(b8,it8000)_rkd_lr0.001/ckpt/flip_mcl_checkpoint_run_0.pth.tar/_checkpoint.pth.tar"\
+    --ckpt "log/casia(b8,it8000)_rkd_lr0.001/ckpt/flip_mcl_checkpoint_run_3.pth.tar/_checkpoint.pth.tar"\
     --config TSNE \
     --op_dir ckpt \
     --report_logger_path log/tsne.log \
