@@ -9,7 +9,7 @@ torchrun --nproc_per_node 1 -m \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
-    --iterations 8000 \
+    --iterations 10000 \
     --epochs 300 \
     --run 3 \
     --batch_size 8 \
@@ -17,13 +17,15 @@ torchrun --nproc_per_node 1 -m \
     --t_batch_size 30 \
     --lr=0.001 \
     --wd=0.1 \
+    --alpha_cls_loss 5. \
+    --alpha_l2_loss 100. \
     --alpha_ckd_loss 0. \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0. \
     --alpha_icl_loss 0.  \
-    --dist_ratio  10. \
-    --angle_ratio  20. \
-    --name "msu(b8,it8000)_rkd_lr0.001"  \
+    --dist_ratio  100. \
+    --angle_ratio  200. \
+    --name "msu(b8,it10000,run3)_rkd_lr0.001_test"  \
     --swin False \
     --set_wandb True \
     --user jiwon

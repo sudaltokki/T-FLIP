@@ -607,6 +607,8 @@ class flip_mcl(nn.Module):
         # logits_per_image, logits_per_text = self.model(input, self.text_inputs)
 
         # Ensemble of text features
+        if self.args.model == 'ViT-B-16':
+            self.model = self.t_model
         ensemble_weights = []
         for classname in (['spoof', 'real']):
             if classname == 'spoof':

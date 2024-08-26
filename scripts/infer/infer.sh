@@ -3,7 +3,7 @@ torchrun --nproc_per_node 1 -m \
     infer \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --ckpt "/home/jiwon/FLIP-KD-P2/log/msu(b8,it4000)_fd10+am0.00001_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
+    --ckpt "log/msu(b8,it4000)_fd10+am0.00001_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
     --config I \
     --op_dir ckpt \
     --report_logger_path log/fdam_replay_out.log \

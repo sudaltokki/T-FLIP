@@ -6,21 +6,18 @@ from utils.utils import save_checkpoint, AverageMeter, Logger, accuracy, mkdirs,
 from utils.evaluate import eval
 from utils.dataset import get_dataset
 from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_for_tsne
-from student.fas import flip_mcl, flip_v, flip_it
+from student.fas import flip_mcl
 import random
 import numpy as np
 from teacher.config import configTSNE
-from datetime import datetime
 import time
 from timeit import default_timer as timer
 import os
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import argparse
 from student.params import parse_args
 import clip
-from clip.model import CLIP
 import logging
 from utils.logger import setup_logging
 from student.fas import flip_mcl
@@ -60,9 +57,9 @@ def plot_tsne(features, dataset_labels, class_labels, datasets, type, file_name,
     datasets: 사용된 데이터셋의 이름 리스트
     num_classes: 클래스의 수 (보통 Real/Fake 2가지)
     """
-
+    perplexity = 50
     # t-SNE 적용
-    tsne = TSNE(n_components=2, perplexity=50, random_state=42)
+    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
     features_2d = tsne.fit_transform(features)
 
     # 시각화
@@ -80,7 +77,7 @@ def plot_tsne(features, dataset_labels, class_labels, datasets, type, file_name,
     plt.suptitle("t-SNE visualization of embeddings by Dataset and Class")
     plt.title(file_name)
 
-    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_{file_name}.png')
+    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_{file_name}_p{perplexity}.png')
     plt.show()
 
 def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
@@ -91,9 +88,9 @@ def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, file_na
     datasets: 사용된 데이터셋의 이름 리스트
     num_classes: 클래스의 수 (보통 Real/Fake 2가지)
     """
-
+    perplexity = 30
     # t-SNE 적용
-    tsne = TSNE(n_components=3, perplexity=70, random_state=42)
+    tsne = TSNE(n_components=3, perplexity=perplexity, random_state=42)
     features_3d = tsne.fit_transform(features)
 
     # 3D 시각화
@@ -114,7 +111,7 @@ def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, file_na
     ax.set_title("t-SNE 3D visualization of embeddings by Dataset and Class")
     plt.title(file_name)
 
-    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_3d_{file_name}.png')
+    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_3d_{file_name}_p{perplexity}.png')
     plt.show()
 
 def plot_umap(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
@@ -141,17 +138,43 @@ def plot_umap(features, dataset_labels, class_labels, datasets, type, file_name,
     plt.savefig(f'tsne_result/umap_{type}_features_visualization_{file_name}.png')
     plt.show()
 
+import plotly.express as px
+import umap
+import pandas as pd
+
+# UMAP 적용
+def plotly_umap(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
+    reducer = umap.UMAP(n_components=3, random_state=42)
+    features_3d = reducer.fit_transform(features)
+
+    df = pd.DataFrame(features_3d, columns=['x', 'y', 'z'])
+    df['dataset'] = dataset_labels
+    df['class'] = class_labels
+
+    fig = px.scatter_3d(df, x='x', y='y', z='z', color='class', symbol='dataset', title="UMAP 3D visualization")
+    fig.show()
+
+import holoviews as hv
+from holoviews import opts
+import umap
+
+hv.extension('bokeh')
+def holoviews_umap(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
+    # UMAP 적용
+    reducer = umap.UMAP(n_components=2, random_state=42)
+    features_2d = reducer.fit_transform(features)
+
+    points = hv.Points(features_2d, vdims='class')
+    points.opts(color='class', cmap='Category10', size=5, tools=['hover'], width=600, height=600)
+    hv.show(points)
+
+
 def infer(config, args):
 
     args_info = "\n".join([f"{arg}: {getattr(args, arg)}" for arg in vars(args)])
     logging.info(f"\n-----------------------------Arguments----------------------------|\n{args_info}\n")
   
     # 데이터셋 로드
-    src1_train_dataloader, src2_train_dataloader, src3_train_dataloader, src4_train_dataloader = get_dataset_for_tsne(args,  
-        config.src1_data, config.src1_train_num_frames, config.src2_data,
-        config.src2_train_num_frames, config.src3_data,
-        config.src3_train_num_frames, config.src4_data,
-        config.src4_train_num_frames, collate_fn=custom_collate_fn)
     data_loaders_list = get_dataset_for_tsne(args,  
         config.src1_data, config.src1_train_num_frames, config.src2_data,
         config.src2_train_num_frames, config.src3_data,
@@ -161,10 +184,12 @@ def infer(config, args):
     #data_loaders_list = data_loaders_list[0]
     random_seed(42, 0)
 
+    
     model = flip_mcl(args, device, in_dim=512, ssl_mlp_dim=4096, ssl_emb_dim=256).to(device) # ssl applied to image, and euclidean distance applied to image and text cosine similarity
-
-    ckpt = torch.load(config.checkpoint)
-    model.load_state_dict(ckpt['state_dict'])
+    
+    if args.model != 'ViT-B-16':
+        ckpt = torch.load(config.checkpoint)
+        model.load_state_dict(ckpt['state_dict'])
     model.eval()
     print('load checkpoint')
 
@@ -198,12 +223,19 @@ def infer(config, args):
     dataset_labels_np = np.concatenate(dataset_labels_list, axis=0)
     class_labels_np = np.concatenate(class_labels_list, axis=0)
 
-    split_ckpt = args.ckpt.split('/')
-    file_name = split_ckpt[1]+'_'+split_ckpt[3].split('_')[3]+split_ckpt[3].split('_')[4]
     
-    plot_tsne(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
-    plot_tsne_3d(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
-    #plot_umap(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    if args.model != 'ViT-B-16':
+        split_ckpt = args.ckpt.split('/')
+        
+        file_name = split_ckpt[1]+'_'+split_ckpt[3].split('_')[3]+split_ckpt[3].split('_')[4]
+    else:
+        split_ckpt = args.t_model_checkpoint.split('/')
+        file_name = split_ckpt[4].split('.')[0]
+    
+    #plot_tsne(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    #plot_tsne_3d(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    #plotly_umap(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
+    holoviews_umap(image_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='image', file_name=file_name)
     #plot_tsne(text_features_np, dataset_labels_np, class_labels_np, datasets=dataset_names, num_classes=2, type='text', file_name=file_name)
         
     return 

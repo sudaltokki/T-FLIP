@@ -2,8 +2,8 @@ torchrun --nproc_per_node 1 -m \
     --master_addr=127.0.0.2 --master_port=29421 \
     plot_tsne \
     --t_model ViT-B-16 \
-    --model ViT-T-16 \
-    --ckpt "log/msu(b8,it10000,run3)_rkd_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
+    --model ViT-B-16 \
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar" \
     --config TSNE \
     --op_dir ckpt \
     --report_logger_path log/tsne.log \
