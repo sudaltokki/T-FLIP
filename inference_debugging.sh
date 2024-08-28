@@ -1,6 +1,6 @@
 torchrun --nproc_per_node 1 -m \
     --master_addr=127.0.0.2 --master_port=28642 \
-    infer \
+    infer_debugging \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
     --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\

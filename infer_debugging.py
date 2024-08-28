@@ -51,7 +51,7 @@ def infer(args, config):
 
 
     ######### eval #########
-    valid_args = eval(test_dataloader, net1, True)
+    valid_args = eval(test_dataloader, net1, True, debugging_flag=True)
     # judge model according to HTER
     is_best = valid_args[3] <= best_model_HTER
     best_model_HTER = min(valid_args[3], best_model_HTER)
@@ -59,10 +59,10 @@ def infer(args, config):
 
     best_model_ACC = valid_args[6]
     best_model_AUC = valid_args[4]
-    best_TPR_FPR = valid_args[-1]
+    best_TPR_FPR = valid_args[-2]
             
 
-    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0
+    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8]
 
 
 def main(args):
@@ -74,6 +74,7 @@ def main(args):
     with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
+    # get the name of the experiments
     if args.name is None:
         args.name = '-'.join([
             args.current_time.strftime("%Y_%m_%d-%H_%M_%S"),
@@ -104,9 +105,14 @@ def main(args):
         f.write('HTER, AUC, TPR@FPR=1%\n')
 
         config.checkpoint = args.ckpt
-        hter, auc, tpr_fpr = infer(args, config)
+        hter, auc, tpr_fpr, true_false_list = infer(args, config)
 
         f.write(f'{hter},{auc},{tpr_fpr}\n')
+    
+    true_false_list_path = "debugging.txt"
+    with open(os.path.join(args.report_logger_path, args.name, true_false_list_path), "w") as tf_file:
+        for name in true_false_list:
+            tf_file.write(f'{name}\n')
 
 
 if __name__ == "__main__":
