@@ -15,6 +15,7 @@ import torch
 import argparse
 from student.params import parse_args
 import json
+from PIL import Image
 
 
 torch.backends.cudnn.deterministic = True
@@ -108,11 +109,21 @@ def main(args):
         hter, auc, tpr_fpr, true_false_list = infer(args, config)
 
         f.write(f'{hter},{auc},{tpr_fpr}\n')
-    
-    true_false_list_path = "debugging.txt"
-    with open(os.path.join(args.report_logger_path, args.name, true_false_list_path), "w") as tf_file:
-        for name in true_false_list:
-            tf_file.write(f'{name}\n')
+
+    output_directory = "debugging_images"
+    output_directory = os.path.join(args.report_logger_path, args.name, output_directory)
+    os.makedirs(output_directory, exist_ok=True)
+
+    for image_path in true_false_list:
+        try:
+            img = Image.open(image_path)
+            image_filename = os.path.basename(image_path)
+            
+            output_path = os.path.join(output_directory, image_filename)
+            img.save(output_path)
+            
+        except Exception as e:
+            print(f"Failed to save {image_path}: {e}")
 
 
 if __name__ == "__main__":
