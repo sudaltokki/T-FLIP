@@ -2,11 +2,11 @@ torchrun --nproc_per_node 1 -m \
     --master_addr=127.0.0.2 --master_port=29421 \
     analysis \
     --t_model ViT-B-16 \
-    --model ViT-T-16 \
-    --ckpt "log/msu(b8,it4000)_fd10+am0.00001_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
-    --config I \
+    --model ViT-B-16 \
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
+    --config M \
     --op_dir ckpt \
-    --report_logger_path log/fdam_replay_out.log \
+    --report_logger_path log/analysis.log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
     --iterations 4000 \
@@ -20,5 +20,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0.00001 \
     --alpha_icl_loss 0.  \
-    --name "infer_casia"  \
+    --name "analyze_msu"  \
     --swin False

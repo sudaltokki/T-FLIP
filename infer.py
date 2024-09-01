@@ -25,6 +25,7 @@ import clip
 from clip.model import CLIP
 import logging
 from utils.logger import setup_logging
+from third_party.utils.random import random_seed
 from student.fas import flip_mcl
 import json
 import wandb
@@ -35,10 +36,6 @@ torch.backends.cudnn.benchmark = False
 
 device = 'cuda'
 
-def random_seed(seed=42, rank=0):
-    torch.manual_seed(seed + rank)
-    np.random.seed(seed + rank)
-    random.seed(seed + rank)
 
 def custom_collate_fn(batch):
     batch = [item for item in batch if item[0] is not None]
@@ -91,6 +88,7 @@ def infer(config, args):
         
 
   return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0
+
 
 
 if __name__ == '__main__':

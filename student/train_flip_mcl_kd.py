@@ -356,6 +356,7 @@ def train(config, args):
             optimizer.zero_grad()
             if args.scheduler == 'cosine':
                 scheduler.step()
+            print('update! iter:',iter_num)
 
         loss_classifier.update(cls_loss.item())
         loss_l2_euclid.update(l2_euclid_loss.item())
