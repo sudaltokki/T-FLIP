@@ -13,6 +13,7 @@ from teacher.config import config_CI, config_CO , config_CM, config_MC, config_M
 from student.params import parse_args
 from student.train_flip_mcl_kd import train
 
+from third_party.utils.random import random_seed
 from utils.utils import set_wandb
 from utils.logger import setup_logging
 
@@ -24,6 +25,7 @@ device = 'cuda'
 
 
 def main(args):    
+    random_seed()
     args = parse_args(args)
 
     with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:

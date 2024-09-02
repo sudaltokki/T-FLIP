@@ -340,11 +340,7 @@ class flip_mcl(nn.Module):
             logits = logits / self.temperature
             return logits, labels
     
-
-    def forward(self, input, input_view_1, input_view_2, source_labels, norm_flag=True):
-        self.model.train()
-
-        # -----------------------------------------t_model load--------------------------------------
+    def load_tmodel(self):
         for t_n, t_p in self.t_model.named_parameters():
             t_p.requires_grad = False
 
@@ -364,6 +360,14 @@ class flip_mcl(nn.Module):
         iter_num_start = epoch*100
 
         self.t_model.eval()
+
+        return self.t_model
+
+    def forward(self, input, input_view_1, input_view_2, source_labels, norm_flag=True):
+        self.model.train()
+
+        # -----------------------------------------t_model load--------------------------------------
+        self.load_tmodel()
         
         #print(f'Loaded checkpoint from epoch {epoch} at iteration : {iter_num_start}' )
         #print('Teacher model loaded successfully')
@@ -572,6 +576,9 @@ class flip_mcl(nn.Module):
         # single text prompt per class
         # logits_per_image, logits_per_text = self.model(input, self.text_inputs)
 
+        if self.args.model == 'ViT-B-16':
+            self.model = self.load_tmodel()
+
         # Ensemble of text features
         ensemble_weights = []
         for classname in (['spoof', 'real']):
@@ -607,6 +614,8 @@ class flip_mcl(nn.Module):
         # logits_per_image, logits_per_text = self.model(input, self.text_inputs)
 
         # Ensemble of text features
+        if self.args.model == 'ViT-B-16':
+            self.model = self.t_model
         ensemble_weights = []
         for classname in (['spoof', 'real']):
             if classname == 'spoof':

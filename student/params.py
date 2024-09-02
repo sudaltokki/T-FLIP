@@ -127,7 +127,12 @@ def parse_args(args):
     parser.add_argument("--wd", type=float, default=None, help="Weight Decay")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size per GPU.")
     parser.add_argument("--total_batch_size", type=int, default=64, help="Batch size per GPU.")
-    parser.add_argument("--t_batch_size", type=int, default=64, help="Batch size per GPU.")   
+    parser.add_argument("--t_batch_size", type=int, default=64, help="Batch size per GPU.") 
+
+    parser.add_argument("--alpha_cls_loss", type=float, default=1., help="CLS loss weight")
+    parser.add_argument("--alpha_sim_loss", type=float, default=1., help="sim loss weight")
+    parser.add_argument("--alpha_l2_loss", type=float, default=1., help="l2 loss weight")
+
     parser.add_argument("--alpha_ckd_loss", type=float, default=0., help="CRD loss weight")
     parser.add_argument("--alpha_icl_loss", type=float, default=0., help="ICL_loss weight")
     parser.add_argument("--alpha_fd_loss", type=float, default=0., help="FD_loss weight")

@@ -340,10 +340,15 @@ def train(config, args):
         # output image feature + text feature
         classifier_label_out , logits_ssl, labels_ssl, l2_euclid_loss, fd_loss, ckd_loss, affinity_loss, icl_loss, rkd_loss = model(input_data, input_data_view_1, input_data_view_2, source_label, True) # ce on I-T, SSL for image and l2 loss for image-view-text dot product
         cls_loss = criterion['softmax'](classifier_label_out.narrow(0, 0, input_data.size(0)), source_label)
-        sim_loss = criterion['softmax'](logits_ssl, labels_ssl) 
+        cls_loss = args.alpha_cls_loss * cls_loss
 
-        fac = 1.0
-        total_loss = cls_loss + fac*sim_loss + fac*l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss + rkd_loss
+        sim_loss = criterion['softmax'](logits_ssl, labels_ssl)
+        sim_loss = args.alpha_sim_loss * sim_loss 
+
+        l2_euclid_loss = args.alpha_l2_loss * l2_euclid_loss
+
+
+        total_loss = cls_loss + sim_loss + l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + icl_loss + rkd_loss
 
         total_loss.backward()
         if (iter_num+1) % accumulation_step == 0:
@@ -351,6 +356,7 @@ def train(config, args):
             optimizer.zero_grad()
             if args.scheduler == 'cosine':
                 scheduler.step()
+            print('update! iter:',iter_num)
 
         loss_classifier.update(cls_loss.item())
         loss_l2_euclid.update(l2_euclid_loss.item())
