@@ -17,7 +17,7 @@ from io import BytesIO
 import PIL.Image as Image
 import plotly.graph_objects as go
 from alphashape import alphashape
-
+from third_party.utils.random import random_seed
 import os
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -537,8 +537,13 @@ def eval_and_analyze(args):
         auc_score, threshold, ACC_threshold * 100, rate
     ], [prob_list, label_list]
 
-if __name__ == '__main__':
-    args = sys.argv[1:]
-    args = parse_args(args)
 
+def main(args):
+    random_seed()
+    args = parse_args(args)
     results, prob_label_lists = eval_and_analyze(args)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+
+    

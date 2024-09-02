@@ -373,29 +373,31 @@ def infer(config, args):
 
     return 
 
+def main(args):
+    random_seed()
+
+    args = parse_args(args)
+
+    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+          args.t_embed_dim = json.load(f)['embed_dim']
+    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+        args.s_embed_dim = json.load(f)['embed_dim']
+
+
+    if args.config == 'TSNE':
+        config = configTSNE
+
+
+    for attr in dir(config):
+      if attr.find('__') == -1:
+        print('%s = %r' % (attr, getattr(config, attr)))
+
+    config.checkpoint = args.ckpt
+
+    infer(config, args)
 
 if __name__ == '__main__':
-  args = sys.argv[1:]
+    main(sys.argv[1:])
 
-  random_seed()
-
-  args = parse_args(args)
-
-  with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
-        args.t_embed_dim = json.load(f)['embed_dim']
-  with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
-      args.s_embed_dim = json.load(f)['embed_dim']
-
-
-  if args.config == 'TSNE':
-      config = configTSNE
-
-
-  for attr in dir(config):
-    if attr.find('__') == -1:
-      print('%s = %r' % (attr, getattr(config, attr)))
-
-  config.checkpoint = args.ckpt
-
-  infer(config, args)
+  
   

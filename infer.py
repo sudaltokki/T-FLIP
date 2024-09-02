@@ -30,6 +30,7 @@ device = 'cuda'
 
 
 def infer(args, config):
+    random_seed()
     _, _, _, _, _, _, _, _, _, _, test_dataloader = get_dataset_ssl_clip(args,   
         config.src1_data, config.src1_train_num_frames,
         config.src2_data, config.src2_train_num_frames,
