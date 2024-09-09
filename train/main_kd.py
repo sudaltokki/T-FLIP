@@ -7,11 +7,11 @@ import torch
 import torch.nn as nn
 
 
-from teacher.config import configC, configM, configI, configO, config_cefa, config_surf, config_wmca
-from teacher.config import config_CI, config_CO , config_CM, config_MC, config_MI, config_MO, config_IC, config_IO, config_IM, config_OC, config_OI, config_OM, custom
+from train.config import configC, configM, configI, configO, config_cefa, config_surf, config_wmca
+from train.config import config_CI, config_CO , config_CM, config_MC, config_MI, config_MO, config_IC, config_IO, config_IM, config_OC, config_OI, config_OM, custom
 
-from student.params import parse_args
-from student.train_flip_mcl_kd import train
+from train.params import parse_args
+from train.train_flip_mcl_kd import train
 
 from third_party.utils.random import random_seed
 from utils.utils import set_wandb
