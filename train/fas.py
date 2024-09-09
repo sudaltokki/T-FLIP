@@ -11,7 +11,7 @@ import third_party
 sys.path.append('../../')
 import clip
 import timm
-from teacher.prompt_templates import spoof_templates, real_templates
+from train.prompt_templates import spoof_templates, real_templates
 from collections import OrderedDict
 from clip.model import CLIP
 
