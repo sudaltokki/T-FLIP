@@ -15,7 +15,7 @@ from utils.utils import save_checkpoint, AverageMeter, accuracy, mkdirs, time_to
 from utils.evaluate import eval
 from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_ssl_clip
 
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 
 
 torch.backends.cudnn.deterministic = True
