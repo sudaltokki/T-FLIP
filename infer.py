@@ -4,9 +4,9 @@ import sys
 
 from utils.evaluate import eval
 from utils.dataset import get_dataset_ssl_clip
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import numpy as np
-from teacher.config import configC, configM, configI, configO
+from train.config import configC, configM, configI, configO
 
 import time
 from timeit import default_timer as timer
