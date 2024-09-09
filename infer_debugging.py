@@ -4,16 +4,16 @@ import sys
 
 from utils.evaluate import eval
 from utils.dataset import get_dataset_ssl_clip
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import numpy as np
-from student.config import configC, configM, configI, configO
+from train.config import configC, configM, configI, configO
 
 import time
 from timeit import default_timer as timer
 import os
 import torch
 import argparse
-from student.params import parse_args
+from train.params import parse_args
 import json
 from PIL import Image
 
