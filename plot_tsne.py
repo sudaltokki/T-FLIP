@@ -6,21 +6,20 @@ from utils.utils import save_checkpoint, AverageMeter, Logger, accuracy, mkdirs,
 from utils.evaluate import eval
 from utils.dataset import get_dataset
 from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_for_tsne
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import random
 import numpy as np
-from teacher.config import configTSNE
+from train.config import configTSNE
 import time
 from timeit import default_timer as timer
 import os
 import torch
 import torch.nn as nn
 import argparse
-from student.params import parse_args
+from train.params import parse_args
 import clip
 import logging
 from utils.logger import setup_logging
-from student.fas import flip_mcl
 import json
 import wandb
 from torch.autograd import Variable
