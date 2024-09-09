@@ -362,6 +362,17 @@ class flip_mcl(nn.Module):
         self.t_model.eval()
 
         return self.t_model
+    
+    def get_grad(p, k, tau, targets):
+        logits = p @ k.T / tau
+        targets = F.one_hot(targets, num_classes=logits.size(1)).float()
+        prob = F.softmax(logits, 1)
+        grad_p = (prob - targets) @ k / tau / targets.size(0)
+        embed_size = p.size(1)
+        prob_targets_repeat = (prob - targets).t().repeat(1, embed_size).view(-1,embed_size, p.size(0))
+        grad_k = (prob_targets_repeat * (p.t() / tau).unsqueeze(0)).sum(-1) / targets.size(0)
+
+        return grad_p, grad_k
 
     def forward(self, input, input_view_1, input_view_2, source_labels, norm_flag=True):
         self.model.train()
@@ -531,14 +542,22 @@ class flip_mcl(nn.Module):
             affinity_loss = (F.cross_entropy(logits_per_image, t_logits_per_image.detach()) +\
                             F.cross_entropy(logits_per_text, t_logits_per_text.detach())) / 2
             affinity_loss = self.args.alpha_affinity_loss * affinity_loss
-        
-        icl_loss = torch.tensor(0.).cuda()
-        if self.args.alpha_icl_loss > 0:
-            icl_loss = (F.cross_entropy(logits_per_s_image_to_t_text, labels) +\
-                        F.cross_entropy(logits_per_s_text_to_t_image, labels)) / 2
-            icl_loss = self.args.alpha_icl_loss * icl_loss
 
-        #----------------------------------------------------------------------------------------------
+        gd_loss = torch.tensor(0.).cuda()
+        if self.args.alpha_gd_loss > 0.:
+            with torch.no_grad():
+                t_grad_p_img, t_grad_k_txt = self.get_grad(t_image_features, t_text_features, t_logit_scale, source_labels)
+                t_grad_p_txt, t_grad_k_img = self.get_grad(t_text_features, t_image_features, t_logit_scale, source_labels)
+            
+            s_grad_p_img, s_grad_k_txt = self.get_grad(image_features, text_features, logit_scale, source_labels)
+            s_grad_p_txt, s_grad_k_img = self.get_grad(text_features, image_features, logit_scale, source_labels)
+        
+            gd_loss = F.mse_loss(s_grad_p_img, t_grad_p_img.detach()) +\
+                F.mse_loss(s_grad_k_txt, t_grad_k_txt.detach()) +\
+                    F.mse_loss(s_grad_p_txt, t_grad_p_txt.detach()) +\
+                        F.mse_loss(s_grad_k_img, t_grad_k_img.detach()) 
+
+        #------------------------------------------RKD Loss---------------------------------------------------
         
         triplet_loss = torch.tensor(0.).cuda()
         if self.args.triplet_ratio > 0 :
@@ -570,7 +589,9 @@ class flip_mcl(nn.Module):
 
         rkd_loss = triplet_loss + dist_loss + angle_loss + dark_loss + at_loss
 
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, icl_loss, rkd_loss
+        #----------------------------------------------------------------------------------------------
+
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class

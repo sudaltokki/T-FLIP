@@ -134,9 +134,9 @@ def parse_args(args):
     parser.add_argument("--alpha_l2_loss", type=float, default=1., help="l2 loss weight")
 
     parser.add_argument("--alpha_ckd_loss", type=float, default=0., help="CRD loss weight")
-    parser.add_argument("--alpha_icl_loss", type=float, default=0., help="ICL_loss weight")
-    parser.add_argument("--alpha_fd_loss", type=float, default=0., help="FD_loss weight")
+    parser.add_argument("--alpha_fd_loss", type=float, default=0., help="FD loss weight")
     parser.add_argument("--alpha_affinity_loss", type=float, default=0., help="affinity loss weight")
+    parser.add_argument("--alpha_gd_loss", type=float, default=0., help="gradient loss weight")
 
     parser.add_argument('--triplet_ratio', default=0, type=float)
     parser.add_argument('--dist_ratio', default=0, type=float)

@@ -243,7 +243,7 @@ def set_wandb(args, i):
         "alpha_ckd_loss": args.alpha_ckd_loss,
         "alpha_fd_loss": args.alpha_fd_loss,
         "alpha_affinity_loss": args.alpha_affinity_loss,
-        "alpha_icl_loss": args.alpha_icl_loss,
+        "alpha_gd_loss": args.alpha_gd_loss,
         "dist_ratio": args.dist_ratio,
         "angle_ratio": args.angle_ratio,
         "batch": args.batch_size,
