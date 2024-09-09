@@ -13,13 +13,13 @@ from timeit import default_timer as timer
 import os
 import torch
 import argparse
-from student.params import parse_args
+from train.params import parse_args
 import clip
 from clip.model import CLIP
 import logging
 from utils.logger import setup_logging
 from third_party.utils.random import random_seed
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import json
 
 
