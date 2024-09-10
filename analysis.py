@@ -26,14 +26,14 @@ import matplotlib.pyplot as plt
 from utils.utils import save_checkpoint, AverageMeter, Logger, accuracy, mkdirs, time_to_str
 from utils.evaluate import eval
 from utils.dataset import get_dataset, get_dataset_one_to_one_ssl_clip, get_dataset_ssl_clip
-from student.fas import flip_mcl, flip_v, flip_it
+from train.fas import flip_mcl, flip_v, flip_it
 from teacher.config import (
     configC, configM, configI, configO, config_cefa, config_surf, config_wmca,
     config_CI, config_CO, config_CM, config_MC, config_MI, config_MO,
     config_IC, config_IO, config_IM, config_OC, config_OI, config_OM
 )
 from utils.statistic import get_EER_states, get_HTER_at_thr, calculate, calculate_threshold
-from student.params import parse_args
+from train.params import parse_args
 
 from third_party.utils.random import random_seed
 
@@ -387,9 +387,9 @@ def plot_with_hovertemplate_2d(image_features_np, filenames, correct_filenames, 
 def eval_and_analyze(args):
     # 모델 및 데이터셋 로드
     random_seed()
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.t_model+'.json'), 'r') as f:
         args.t_embed_dim = json.load(f)['embed_dim']
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
     config_map = {

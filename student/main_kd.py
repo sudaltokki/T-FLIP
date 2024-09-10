@@ -10,8 +10,8 @@ import torch.nn as nn
 from teacher.config import configC, configM, configI, configO, config_cefa, config_surf, config_wmca
 from teacher.config import config_CI, config_CO , config_CM, config_MC, config_MI, config_MO, config_IC, config_IO, config_IM, config_OC, config_OI, config_OM, custom
 
-from student.params import parse_args
-from student.train_flip_mcl_kd import train
+from train.params import parse_args
+from train.train_flip_mcl_kd import train
 
 from third_party.utils.random import random_seed
 from utils.utils import set_wandb
@@ -28,9 +28,9 @@ def main(args):
     random_seed()
     args = parse_args(args)
 
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.t_model+'.json'), 'r') as f:
         args.t_embed_dim = json.load(f)['embed_dim']
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
     # get the name of the experiments

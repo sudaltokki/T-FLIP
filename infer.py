@@ -4,7 +4,7 @@ import sys
 
 from utils.evaluate import eval
 from utils.dataset import get_dataset_ssl_clip
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import numpy as np
 from teacher.config import configC, configM, configI, configO
 
@@ -13,13 +13,13 @@ from timeit import default_timer as timer
 import os
 import torch
 import argparse
-from student.params import parse_args
+from train.params import parse_args
 import clip
 from clip.model import CLIP
 import logging
 from utils.logger import setup_logging
 from third_party.utils.random import random_seed
-from student.fas import flip_mcl
+from train.fas import flip_mcl
 import json
 
 
@@ -77,9 +77,9 @@ def main(args):
 
     args = parse_args(args)
 
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.t_model+'.json'), 'r') as f:
         args.t_embed_dim = json.load(f)['embed_dim']
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
     if args.name is None:
