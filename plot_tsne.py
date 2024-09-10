@@ -71,7 +71,7 @@ def plot_tsne(features, dataset_labels, class_labels, datasets, type, file_name,
     plt.suptitle("t-SNE visualization of embeddings by Dataset and Class")
     plt.title(file_name)
 
-    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_{file_name}_p{perplexity}.png')
+    plt.savefig(f'result/tsne_{type}_features_visualization_{file_name}_p{perplexity}.png')
     plt.show()
     
 def plot_tsne_combined(image_features, text_features, dataset_labels, class_labels, datasets, file_name, num_classes=2, perplexity=30):
@@ -107,7 +107,7 @@ def plot_tsne_combined(image_features, text_features, dataset_labels, class_labe
     plt.title(file_name)
     plt.legend()
     plt.suptitle("t-SNE visualization of embeddings by Dataset and Class")
-    plt.savefig(f'tsne_result/tsne_image&text_features_visualization_{file_name}_p{perplexity}.png')
+    plt.savefig(f'result/tsne_image&text_features_visualization_{file_name}_p{perplexity}.png')
     plt.show()
 
 
@@ -142,7 +142,7 @@ def plot_tsne_3d(features, dataset_labels, class_labels, datasets, type, file_na
     ax.set_title("t-SNE 3D visualization of embeddings by Dataset and Class")
     plt.title(file_name)
 
-    plt.savefig(f'tsne_result/tsne_{type}_features_visualization_3d_{file_name}_p{perplexity}.png')
+    plt.savefig(f'result/tsne_{type}_features_visualization_3d_{file_name}_p{perplexity}.png')
     plt.show()
 
 def plot_tsne_3d_combined(image_features, text_features, dataset_labels, class_labels, datasets, file_name, num_classes=2, perplexity=30):
@@ -184,7 +184,7 @@ def plot_tsne_3d_combined(image_features, text_features, dataset_labels, class_l
     ax.set_title("t-SNE 3D visualization of embeddings by Dataset and Class")
     plt.title(file_name)
 
-    plt.savefig(f'tsne_result/tsne3d_{type}_features_visualization_3d_{file_name}_p{perplexity}.png')
+    plt.savefig(f'result/tsne3d_{type}_features_visualization_3d_{file_name}_p{perplexity}.png')
     plt.show()    
 
 def plot_umap_3d(image_features, dataset_labels, class_labels, datasets, file_name, num_classes=2, min_dist=0.8):
@@ -227,7 +227,7 @@ def plot_umap(features, dataset_labels, class_labels, datasets, type, file_name,
     plt.title(file_name)
     plt.suptitle("UMAP visualization of embeddings by Dataset and Class")
 
-    plt.savefig(f'tsne_result/umap_{type}_features_visualization_{file_name}_mindist{min_dist}.png')
+    plt.savefig(f'result/umap_{type}_features_visualization_{file_name}_mindist{min_dist}.png')
     plt.show()
 
 def plotly_umap_2d(features, dataset_labels, class_labels, datasets, type, file_name, num_classes=2):
