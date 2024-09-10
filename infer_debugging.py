@@ -70,9 +70,9 @@ def main(args):
 
     args = parse_args(args)
 
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.t_model+'.json'), 'r') as f:
         args.t_embed_dim = json.load(f)['embed_dim']
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
     # get the name of the experiments

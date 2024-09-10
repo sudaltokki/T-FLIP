@@ -3,8 +3,8 @@ torchrun --nproc_per_node 1 -m \
     infer \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
-    --ckpt "log/msu(b8,it4000)_fd10+am0.00001_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
-    --config M \
+    --ckpt "log/msu(b8,it8000)_fd10+rkd_lr0.001/ckpt/flip_mcl_checkpoint_run_1.pth.tar/_checkpoint.pth.tar"\
+    --config O \
     --op_dir ckpt \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
@@ -20,5 +20,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0.00001 \
     --alpha_icl_loss 0.  \
-    --name "msu_out_testtest"  \
+    --name "rkd_oulu_out"  \
     --swin False

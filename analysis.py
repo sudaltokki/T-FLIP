@@ -26,14 +26,14 @@ import matplotlib.pyplot as plt
 from utils.utils import save_checkpoint, AverageMeter, Logger, accuracy, mkdirs, time_to_str
 from utils.evaluate import eval
 from utils.dataset import get_dataset, get_dataset_one_to_one_ssl_clip, get_dataset_ssl_clip
-from student.fas import flip_mcl, flip_v, flip_it
+from train.fas import flip_mcl, flip_v, flip_it
 from teacher.config import (
     configC, configM, configI, configO, config_cefa, config_surf, config_wmca,
     config_CI, config_CO, config_CM, config_MC, config_MI, config_MO,
     config_IC, config_IO, config_IM, config_OC, config_OI, config_OM
 )
 from utils.statistic import get_EER_states, get_HTER_at_thr, calculate, calculate_threshold
-from student.params import parse_args
+from train.params import parse_args
 
 from third_party.utils.random import random_seed
 
@@ -216,7 +216,7 @@ def plot_with_hovertemplate_umap2d2(image_features_np, filenames, correct_filena
         x=umap_results[[i for i in range(len(filenames)) if filenames[i] in correct_filenames], 0],
         y=umap_results[[i for i in range(len(filenames)) if filenames[i] in correct_filenames], 1],
         mode='markers',
-        marker=dict(size=5, color='red'),
+        marker=dict(size=5, color='blue'),
         hovertemplate='<b>Filename:</b> %{text}<br>',
         text=[filenames[i] for i in range(len(filenames)) if filenames[i] in correct_filenames]
     ))
@@ -226,7 +226,7 @@ def plot_with_hovertemplate_umap2d2(image_features_np, filenames, correct_filena
         x=umap_results[[i for i in range(len(filenames)) if filenames[i] in incorrect_filenames], 0],
         y=umap_results[[i for i in range(len(filenames)) if filenames[i] in incorrect_filenames], 1],
         mode='markers',
-        marker=dict(size=5, color='blue'),
+        marker=dict(size=5, color='red'),
         hovertemplate='<b>Filename:</b> %{text}<br>',
         text=[filenames[i] for i in range(len(filenames)) if filenames[i] in incorrect_filenames]
     ))
@@ -387,9 +387,9 @@ def plot_with_hovertemplate_2d(image_features_np, filenames, correct_filenames, 
 def eval_and_analyze(args):
     # 모델 및 데이터셋 로드
     random_seed()
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.t_model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.t_model+'.json'), 'r') as f:
         args.t_embed_dim = json.load(f)['embed_dim']
-    with open(os.path.join(os.getcwd(), 'student/model_config/'+args.model+'.json'), 'r') as f:
+    with open(os.path.join(os.getcwd(), 'train/model_config/'+args.model+'.json'), 'r') as f:
         args.s_embed_dim = json.load(f)['embed_dim']
 
     config_map = {
@@ -429,18 +429,23 @@ def eval_and_analyze(args):
     dataset_labels_list = []
     class_labels_list = []
 
+    pred_list = []
+
     with torch.no_grad():
         for iter, (input, target, videoID, name) in enumerate(valid_dataloader):
             input = Variable(input).cuda()
             target = Variable(torch.from_numpy(np.array(target)).long()).cuda()
             cls_out = model.forward_eval(input, True)
 
-            prob = F.softmax(cls_out, dim=1).cpu().data.numpy()[:, 1]
+            prob = F.softmax(cls_out, dim=1).cpu().data.numpy()[:,1]
+            pred = np.argmax(F.softmax(cls_out, dim=1).cpu().data.numpy(), axis=1)
             label = target.cpu().data.numpy()
             videoID = videoID.cpu().data.numpy()
 
             for i in range(len(prob)):
                 filenames.append(name[i])
+                pred_list.append(pred[i])
+
                 if videoID[i] in prob_dict:
                     prob_dict[videoID[i]].append(prob[i])
                     label_dict[videoID[i]].append(label[i])
@@ -481,27 +486,13 @@ def eval_and_analyze(args):
     dataset_labels_np = np.concatenate(dataset_labels_list, axis=0)
     class_labels_np = np.concatenate(class_labels_list, axis=0)
 
-    for i in range(len(prob_list)):
-        print('problist',prob_list[i])
-        if abs(prob_list[i] - label_list[i]) > 0.6:
-            incorrect_filenames.append(filenames[i])
-        else:
-            correct_filenames.append(filenames[i])
-    
-    real_list = []
-    spoof_list = []
-
-    for i in range(len(label_list)):
-        if label_list[i] == 0:
-            spoof_list.append(filenames[i])
-        else:
-            real_list.append(filenames[i])
-
 
     auc_score = roc_auc_score(label_list, prob_list)
     cur_EER_valid, threshold, _, _ = get_EER_states(prob_list, label_list)
     ACC_threshold = calculate_threshold(prob_list, label_list, threshold)
     cur_HTER_valid = get_HTER_at_thr(prob_list, label_list, threshold)
+
+
 
     print('threshold', threshold)
     print('ACC', ACC_threshold)
@@ -514,6 +505,36 @@ def eval_and_analyze(args):
     tpr_filtered = tpr[fpr <= 1 / 100]
     rate = tpr_filtered[-1] if len(tpr_filtered) > 0 else 0
     print("TPR@FPR = ", rate)
+
+    #print(label_list)
+    #print(pred_list)
+
+    # threshold
+    for i in range(len(prob_list)):
+        if prob_list[i] >= threshold:
+            incorrect_filenames.append(filenames[i])
+        else:
+            correct_filenames.append(filenames[i])
+
+    # 더 큰 prob
+    # for i in range(len(prob_list)):
+    #     if pred_list[i] != label_list[i]:
+    #         incorrect_filenames.append(filenames[i])
+    #     else:
+    #         correct_filenames.append(filenames[i])
+    print(len(incorrect_filenames))
+    print(len(correct_filenames))
+
+    return
+    
+    real_list = []
+    spoof_list = []
+
+    for i in range(len(label_list)):
+        if label_list[i] == 0:
+            spoof_list.append(filenames[i])
+        else:
+            real_list.append(filenames[i])
 
     # 파일명 저장
     with open(f'{args.config}_incorrect_filenames.txt', 'w') as f:
@@ -541,7 +562,7 @@ def eval_and_analyze(args):
 def main(args):
     random_seed()
     args = parse_args(args)
-    results, prob_label_lists = eval_and_analyze(args)
+    eval_and_analyze(args)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
