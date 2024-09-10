@@ -25,7 +25,7 @@ torchrun --nproc_per_node 1 -m \
     --alpha_icl_loss 0.  \
     --dist_ratio  100. \
     --angle_ratio  200. \
-    --name "msu(b40,it10000,run3)_rkd_lr0.001"  \
+    --name "msu(b40,it15000,run3)_rkd_lr0.001"  \
     --swin False \
     --set_wandb True \
     --user jiwon
