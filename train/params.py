@@ -116,6 +116,11 @@ def parse_args(args):
         default=False,
         help="use swin transformer instead of vit"
     )
+    parser.add_argument(
+        "--vis",
+        default=False,
+        help="attention map visualizing"
+    )
 
     
     parser.add_argument("--iterations", type=int, default=4000, help="Number of iterations to train for.")
