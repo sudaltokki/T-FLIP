@@ -52,7 +52,7 @@ def infer(args, config):
 
 
     ######### eval #########
-    valid_args = eval(test_dataloader, net1, True, vis=args.vis)
+    valid_args = eval(test_dataloader, net1, True, debugging_flag=True)
     # judge model according to HTER
     is_best = valid_args[3] <= best_model_HTER
     best_model_HTER = min(valid_args[3], best_model_HTER)
@@ -63,7 +63,7 @@ def infer(args, config):
     best_TPR_FPR = valid_args[-2]
             
 
-    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8], valid_args[9]
+    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8]
 
 
 def main(args):
@@ -106,7 +106,7 @@ def main(args):
         f.write('HTER, AUC, TPR@FPR=1%\n')
 
         config.checkpoint = args.ckpt
-        hter, auc, tpr_fpr, true_false_list, attention_map = infer(args, config)
+        hter, auc, tpr_fpr, true_false_list = infer(args, config)
 
         f.write(f'{hter},{auc},{tpr_fpr}\n')
 
