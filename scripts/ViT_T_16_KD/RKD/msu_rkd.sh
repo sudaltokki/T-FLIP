@@ -1,6 +1,6 @@
 torchrun --nproc_per_node 1 -m \
     --master_addr=127.0.0.2 --master_port=29455 \
-    student.main_kd \
+    train.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
     --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
@@ -25,7 +25,7 @@ torchrun --nproc_per_node 1 -m \
     --alpha_icl_loss 0.  \
     --dist_ratio  100. \
     --angle_ratio  200. \
-    --name "msu(b40,it10000,run3)_rkd_lr0.001"  \
+    --name "msu(b40,it15000,run3)_rkd_lr0.001"  \
     --swin False \
     --set_wandb True \
     --user jiwon
