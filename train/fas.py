@@ -143,129 +143,6 @@ class DistillKL(nn.Module):
         return loss
 
 
-# Models
-
-# adaptive transfomer
-class fas_model_adapt(nn.Module):
-
-    def __init__(self, gamma, beta):
-        super(fas_model_adapt, self).__init__()
-        self.backbone = feature_generator_adapt(gamma, beta)
-        self.embedder = feature_embedder()
-        self.classifier = classifier()
-
-    def forward(self, input, norm_flag=True):
-        feature, total_loss = self.backbone(input)
-        feature = self.embedder(feature, norm_flag)
-        classifier_out = self.classifier(feature, norm_flag)
-        return classifier_out, feature, total_loss
-
-# base vit
-class fas_model_fix(nn.Module):
-
-    def __init__(self):
-        super(fas_model_fix, self).__init__()
-        self.backbone = feature_generator()
-        self.embedder = feature_embedder()
-        self.classifier = classifier()
-
-    def forward(self, input, norm_flag=True):
-        feature = self.backbone(input)
-        feature = self.embedder(feature, norm_flag)
-        classifier_out = self.classifier(feature, norm_flag)
-        return classifier_out, feature
-
-# base vit - stage 1 for vitaf*
-class fas_model_fix_vitaf(nn.Module):
-
-    def __init__(self):
-        super(fas_model_fix_vitaf, self).__init__()
-        self.backbone = feature_generator_fix_vitaf()
-        self.embedder = feature_embedder()
-        self.classifier = classifier()
-
-    def forward(self, input, norm_flag=True):
-        feature = self.backbone(input)
-        feature = self.embedder(feature, norm_flag)
-        classifier_out = self.classifier(feature, norm_flag)
-        return classifier_out, feature
-
-# beit
-class fas_model_beit(nn.Module):
-
-    def __init__(self):
-        super(fas_model_beit, self).__init__()
-        self.backbone = feature_generator_beit()
-        self.embedder = feature_embedder()
-        self.classifier = classifier()
-
-    def forward(self, input, norm_flag=True):
-        feature = self.backbone(input)
-        feature = self.embedder(feature, norm_flag)
-        classifier_out = self.classifier(feature, norm_flag)
-        return classifier_out, feature
-
-# FLIP-V
-class flip_v(nn.Module):
-
-    def __init__(self):
-        super(flip_v, self).__init__()
-        self.backbone = feature_generator_clip()
-        self.embedder = feature_embedder()
-        self.classifier = classifier()
-
-    def forward(self, input, norm_flag=True):
-        feature,_ = self.backbone(input)
-        feature = self.embedder(feature, norm_flag)
-        classifier_out = self.classifier(feature, norm_flag)
-        return classifier_out, feature
-
-# FLIP-IT
-class flip_it(nn.Module):
-
-    def __init__(self):
-        super(flip_it, self).__init__()
-        # self.model, _ = clip.load("ViT-B/16", 'cuda:0')
-        # self.text_inputs = torch.cat([clip.tokenize("a photo of a spoof face") , clip.tokenize("a photo of a real face")]).cuda()
-        
-    def forward(self, input, norm_flag=True):
-        # single text prompt per class
-        # logits_per_image, logits_per_text = self.model(input, self.text_inputs)
-
-        # Ensemble of text features
-        # tokenize the spoof and real templates
-        spoof_texts = clip.tokenize(spoof_templates).cuda(non_blocking=True) #tokenize
-        real_texts = clip.tokenize(real_templates).cuda(non_blocking=True) #tokenize
-        #embed with text encoder
-        spoof_class_embeddings = self.model.encode_text(spoof_texts) 
-        spoof_class_embeddings = spoof_class_embeddings.mean(dim=0)
-        real_class_embeddings = self.model.encode_text(real_texts)
-        real_class_embeddings = real_class_embeddings.mean(dim=0)
-
-        # stack the embeddings for image-text similarity
-        ensemble_weights = [spoof_class_embeddings, real_class_embeddings ] 
-        text_features = torch.stack(ensemble_weights, dim=0).cuda()
-        # get the image features
-        image_features = self.model.encode_image(input)
-        # normalized features
-        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-
-        # cosine similarity as logits
-        logit_scale = self.model.logit_scale.exp()
-        logits_per_image = logit_scale * image_features @ text_features.t()
-
-        similarity = logits_per_image
-        return similarity, None
-
-
-    def forward_vis(self, input, norm_flag=True):
-        # image_features, image_features_proj = self.model.encode_image(input)
-        _, image_features_proj = self.model.visual.forward_full(input)
-        feature = image_features_proj
-
-        return None, feature
-
 # FLIP-MCL
 class flip_mcl(nn.Module):
 
@@ -277,7 +154,7 @@ class flip_mcl(nn.Module):
         self.device = device
 
         self.t_model, _ = clip.load("ViT-B/16", 'cuda:0')        
-        self.model = CLIP(512, 224, 12, 192, 16, 77, 49408, 384, 6, 12, args.swin)
+        self.model = CLIP(512, 224, 12, 192, 16, 77, 49408, 384, 6, 12, args.swin, args.vis)
 
         if args.t_embed_dim != args.s_embed_dim:
             self.visual_proj = nn.Linear(args.s_embed_dim, args.t_embed_dim)
@@ -310,7 +187,6 @@ class flip_mcl(nn.Module):
             ("layer3", nn.Linear(mlp_dim, out_dim)),
         ]))
     
-
     def info_nce_loss(self, feature_view_1, feature_view_2):
             assert feature_view_1.shape == feature_view_2.shape
             features = torch.cat([feature_view_1, feature_view_2], dim=0)
@@ -363,7 +239,7 @@ class flip_mcl(nn.Module):
 
         return self.t_model
     
-    def get_grad(p, k, tau, targets):
+    def get_grad(self, p, k, tau, targets):
         logits = p @ k.T / tau
         targets = F.one_hot(targets, num_classes=logits.size(1)).float()
         prob = F.softmax(logits, 1)
@@ -528,7 +404,8 @@ class flip_mcl(nn.Module):
 
         fd_loss = torch.tensor(0.).cuda()
         if self.args.alpha_fd_loss > 0:
-            fd_loss = F.mse_loss(image_features, t_image_features) + F.mse_loss(text_features, t_text_features)
+            #fd_loss = F.mse_loss(image_features, t_image_features) + F.mse_loss(text_features, t_text_features)
+            fd_loss = F.mse_loss(image_features, t_image_features)
             fd_loss = self.args.alpha_fd_loss * fd_loss
 
         ckd_loss = torch.tensor(0.).cuda()
@@ -545,17 +422,22 @@ class flip_mcl(nn.Module):
 
         gd_loss = torch.tensor(0.).cuda()
         if self.args.alpha_gd_loss > 0.:
-            with torch.no_grad():
-                t_grad_p_img, t_grad_k_txt = self.get_grad(t_image_features, t_text_features, t_logit_scale, source_labels)
-                t_grad_p_txt, t_grad_k_img = self.get_grad(t_text_features, t_image_features, t_logit_scale, source_labels)
+            for label in source_labels:
+                #label = int(label.item())
+
+                with torch.no_grad():
+                    t_grad_p_img, t_grad_k_txt = self.get_grad(t_image_features, t_text_features, t_logit_scale, label)
+                    t_grad_p_txt, t_grad_k_img = self.get_grad(t_text_features, t_image_features, t_logit_scale, label)
             
-            s_grad_p_img, s_grad_k_txt = self.get_grad(image_features, text_features, logit_scale, source_labels)
-            s_grad_p_txt, s_grad_k_img = self.get_grad(text_features, image_features, logit_scale, source_labels)
+                s_grad_p_img, s_grad_k_txt = self.get_grad(image_features, text_features, logit_scale, label)
+                s_grad_p_txt, s_grad_k_img = self.get_grad(text_features, image_features, logit_scale, label)
         
-            gd_loss = F.mse_loss(s_grad_p_img, t_grad_p_img.detach()) +\
-                F.mse_loss(s_grad_k_txt, t_grad_k_txt.detach()) +\
+                gd_loss += F.mse_loss(s_grad_p_img, t_grad_p_img.detach()) +\
+                    F.mse_loss(s_grad_k_txt, t_grad_k_txt.detach()) +\
                     F.mse_loss(s_grad_p_txt, t_grad_p_txt.detach()) +\
-                        F.mse_loss(s_grad_k_img, t_grad_k_img.detach()) 
+                    F.mse_loss(s_grad_k_img, t_grad_k_img.detach()) 
+                
+            gd_loss = self.args.alpha_gd_loss * gd_loss
 
         #------------------------------------------RKD Loss---------------------------------------------------
         
@@ -615,7 +497,11 @@ class flip_mcl(nn.Module):
         text_features = torch.stack(ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features = self.model.encode_image(input)
+        if self.args.vis == True:
+            image_features, attention_map = self.model.encode_image(input)
+        else:
+            image_features = self.model.encode_image(input)
+
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)
@@ -628,7 +514,11 @@ class flip_mcl(nn.Module):
         logits_per_image = logit_scale * image_features @ text_features.t()
 
         similarity = logits_per_image
-        return similarity
+
+        if self.args.vis == True:
+            return similarity, attention_map
+        else:
+            return similarity
     
     def forward_tsne(self, input, norm_flag=True):
         # single text prompt per class
@@ -652,6 +542,7 @@ class flip_mcl(nn.Module):
 
         # get the image features
         image_features = self.model.encode_image(input)
+
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)

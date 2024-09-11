@@ -180,10 +180,21 @@ class ResidualAttentionBlock(nn.Module):
         self.ln_2 = LayerNorm(d_model)
         self.attn_mask = attn_mask
 
+    '''
     def attention(self, x: torch.Tensor):
         self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
         return self.attn(x, x, x, need_weights=False, attn_mask=self.attn_mask)[0]
+    '''
 
+    def attention(self, x: torch.Tensor, vis=False):
+        self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
+        if vis == False:
+            attn_output = self.attn(x, x, x, need_weights=False, attn_mask=self.attn_mask)[0]
+            return attn_output
+        else:
+            attn_output, attn_weights = self.attn(x, x, x, need_weights=True, attn_mask=self.attn_mask)
+            return attn_output, attn_weights
+    
     def forward(self, x: torch.Tensor):
         x = x + self.attention(self.ln_1(x))
         x = x + self.mlp(self.ln_2(x))
@@ -191,10 +202,11 @@ class ResidualAttentionBlock(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, width: int, layers: int, heads: int, attn_mask: torch.Tensor = None):
+    def __init__(self, width: int, layers: int, heads: int, vis = False, attn_mask: torch.Tensor = None):
         super().__init__()
         self.width = width
         self.layers = layers
+        self.vis = vis
         self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask) for _ in range(layers)])
 
     def forward(self, x: torch.Tensor):
@@ -202,7 +214,7 @@ class Transformer(nn.Module):
 
 
 class VisionTransformer(nn.Module):
-    def __init__(self, input_resolution: int, patch_size: int, width: int, layers: int, heads: int, output_dim: int):
+    def __init__(self, input_resolution: int, patch_size: int, width: int, layers: int, heads: int, output_dim: int, visualize: False):
         super().__init__()
         self.input_resolution = input_resolution
         self.output_dim = output_dim
@@ -218,7 +230,12 @@ class VisionTransformer(nn.Module):
         self.ln_post = LayerNorm(width)
         self.proj = nn.Parameter(scale * torch.randn(width, output_dim))
 
+        self.vis = visualize
+        self.ln_1 = LayerNorm(width)
+
     def forward(self, x: torch.Tensor):
+        attention_map = []
+
         x = self.conv1(x)  # shape = [*, width, grid, grid]
         x = x.reshape(x.shape[0], x.shape[1], -1)  # shape = [*, width, grid ** 2]
         x = x.permute(0, 2, 1)  # shape = [*, grid ** 2, width]
@@ -227,7 +244,13 @@ class VisionTransformer(nn.Module):
         x = self.ln_pre(x)
 
         x = x.permute(1, 0, 2)  # NLD -> LND
-        x = self.transformer(x)
+
+        #x = self.transformer(x)
+        for block in self.transformer.resblocks:
+            x, attn_weights = block.attention(self.ln_1(x), vis=self.vis)
+            attention_map.append(attn_weights)
+            x = x + block.mlp(self.ln_2(x))
+
         x = x.permute(1, 0, 2)  # LND -> NLD
 
         x = self.ln_post(x[:, 0, :])
@@ -235,7 +258,10 @@ class VisionTransformer(nn.Module):
         if self.proj is not None:
             x = x @ self.proj
 
-        return x
+        if self.vis == True:
+            return x, attention_map
+        else:
+            return x
 
     def forward_full(self, x: torch.Tensor):
         x = self.conv1(x)  # shape = [*, width, grid, grid]
@@ -271,11 +297,13 @@ class CLIP(nn.Module):
                  transformer_width: int,
                  transformer_heads: int,
                  transformer_layers: int,
-                 swin_transformer: False
+                 swin_transformer: False,
+                 visualize = False
                  ):
         super().__init__()
 
         self.context_length = context_length
+        self.visualize = visualize
 
 
         if swin_transformer == True:
@@ -293,7 +321,7 @@ class CLIP(nn.Module):
                     input_resolution=image_resolution,
                     width=vision_width
                 )
-            else:
+            else:  # here
                 vision_heads = vision_width // 64
                 self.visual = VisionTransformer(
                     input_resolution=image_resolution,
@@ -301,7 +329,8 @@ class CLIP(nn.Module):
                     width=vision_width,
                     layers=vision_layers,
                     heads=vision_heads,
-                    output_dim=embed_dim
+                    output_dim=embed_dim,
+                    visualize=self.visualize
                 )
 
         self.transformer = Transformer(

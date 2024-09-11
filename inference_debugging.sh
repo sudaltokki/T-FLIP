@@ -21,5 +21,6 @@ torchrun --nproc_per_node 1 -m \
     --alpha_affinity_loss 0 \
     --alpha_icl_loss 0.  \
     --swin True  \
+    --vis True \
     --set_wandb True \
     --user y
