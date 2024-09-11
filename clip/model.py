@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from typing import Tuple, Union
-
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -180,37 +179,32 @@ class ResidualAttentionBlock(nn.Module):
         self.ln_2 = LayerNorm(d_model)
         self.attn_mask = attn_mask
 
-    '''
     def attention(self, x: torch.Tensor):
         self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
-        return self.attn(x, x, x, need_weights=False, attn_mask=self.attn_mask)[0]
-    '''
-
-    def attention(self, x: torch.Tensor, vis=False):
-        self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
-        if vis == False:
-            attn_output = self.attn(x, x, x, need_weights=False, attn_mask=self.attn_mask)[0]
-            return attn_output
-        else:
-            attn_output, attn_weights = self.attn(x, x, x, need_weights=True, attn_mask=self.attn_mask)
-            return attn_output, attn_weights
+        return self.attn(x, x, x, need_weights=True, attn_mask=self.attn_mask)
     
     def forward(self, x: torch.Tensor):
-        x = x + self.attention(self.ln_1(x))
+        out, attention_weight = self.attention(self.ln_1(x))
+        x = x + out
         x = x + self.mlp(self.ln_2(x))
-        return x
+        return x, attention_weight
 
 
 class Transformer(nn.Module):
-    def __init__(self, width: int, layers: int, heads: int, vis = False, attn_mask: torch.Tensor = None):
+    def __init__(self, width: int, layers: int, heads: int, attn_mask: torch.Tensor = None):
         super().__init__()
         self.width = width
         self.layers = layers
-        self.vis = vis
         self.resblocks = nn.Sequential(*[ResidualAttentionBlock(width, heads, attn_mask) for _ in range(layers)])
 
     def forward(self, x: torch.Tensor):
-        return self.resblocks(x)
+        attention_map = []
+
+        for resblock in self.resblocks:
+            x, attn_weights = resblock(x)
+            attention_map.append(attn_weights)
+
+        return x, attention_map
 
 
 class VisionTransformer(nn.Module):
@@ -231,11 +225,8 @@ class VisionTransformer(nn.Module):
         self.proj = nn.Parameter(scale * torch.randn(width, output_dim))
 
         self.vis = visualize
-        self.ln_1 = LayerNorm(width)
 
     def forward(self, x: torch.Tensor):
-        attention_map = []
-
         x = self.conv1(x)  # shape = [*, width, grid, grid]
         x = x.reshape(x.shape[0], x.shape[1], -1)  # shape = [*, width, grid ** 2]
         x = x.permute(0, 2, 1)  # shape = [*, grid ** 2, width]
@@ -244,13 +235,7 @@ class VisionTransformer(nn.Module):
         x = self.ln_pre(x)
 
         x = x.permute(1, 0, 2)  # NLD -> LND
-
-        #x = self.transformer(x)
-        for block in self.transformer.resblocks:
-            x, attn_weights = block.attention(self.ln_1(x), vis=self.vis)
-            attention_map.append(attn_weights)
-            x = x + block.mlp(self.ln_2(x))
-
+        x, attention_map = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
 
         x = self.ln_post(x[:, 0, :])
@@ -408,7 +393,7 @@ class CLIP(nn.Module):
 
         x = x + self.positional_embedding.type(self.dtype)
         x = x.permute(1, 0, 2)  # NLD -> LND
-        x = self.transformer(x)
+        x, _ = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
         x = self.ln_final(x).type(self.dtype)
 
