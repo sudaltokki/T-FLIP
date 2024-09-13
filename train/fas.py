@@ -154,7 +154,7 @@ class flip_mcl(nn.Module):
         self.device = device
 
         self.t_model, _ = clip.load("ViT-B/16", 'cuda:0')        
-        self.model = CLIP(512, 224, 12, 192, 16, 77, 49408, 384, 6, 12, args.swin, args.vis)
+        self.model = CLIP(512, 224, 12, 192, 16, 77, 49408, 384, 6, 12, args.swin)
 
         if args.t_embed_dim != args.s_embed_dim:
             self.visual_proj = nn.Linear(args.s_embed_dim, args.t_embed_dim)
@@ -500,8 +500,7 @@ class flip_mcl(nn.Module):
         if self.args.vis == True:
             image_features, attention_map = self.model.encode_image(input)
         else:
-            image_features = self.model.encode_image(input)
-
+            image_features, _ = self.model.encode_image(input)
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)

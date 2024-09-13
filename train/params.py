@@ -118,6 +118,7 @@ def parse_args(args):
     )
     parser.add_argument(
         "--vis",
+        type=bool,
         default=False,
         help="attention map visualizing"
     )

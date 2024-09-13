@@ -16,12 +16,51 @@ import argparse
 from train.params import parse_args
 import json
 from PIL import Image
+import matplotlib.pyplot as plt
+import torchvision.transforms as transforms
 
 
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 device = 'cuda'
+
+
+def overlay(image, attention_map):
+
+    attention_map = attention_map / attention_map.max()
+
+    image = transforms.ToTensor()(image).permute(1, 2, 0).numpy()
+    attention_map_r = np.array(Image.fromarray(attention_map).resize(image.shape[:2], Image.BILINEAR))
+
+    overlay = image.copy()
+    overlay[:, :, 0] += attention_map_r
+
+    return overlay
+
+
+def save_image(path, attention_maps, output_dir):
+
+    try:
+        img = Image.open(path).convert("RGB")
+        image_filename = os.path.basename(path)
+        image_base, _ = os.path.splitext(image_filename)
+
+        image_output_dir = os.path.join(output_dir, image_base)
+        os.makedirs(image_output_dir, exist_ok=True)
+
+        img.save(os.path.join(image_output_dir, f"{image_base}_original.jpg"))
+
+        for idx, attention_map in enumerate(attention_maps):
+
+            overlay_img = overlay(img, attention_map)
+            plt.imshow(overlay_img)
+            overlay_dir = os.path.join(image_output_dir, f"layer_{idx}.jpg")
+            plt.savefig(overlay_dir, bbox_inches='tight', pad_inches=0)
+            plt.close()
+        
+    except Exception as e:
+        print(f"failed to save attention maps for {path}: {e}")
 
 
 def infer(args, config):
@@ -52,7 +91,7 @@ def infer(args, config):
 
 
     ######### eval #########
-    valid_args = eval(test_dataloader, net1, True, debugging_flag=True)
+    valid_args = eval(test_dataloader, net1, norm_flag=True, vis=args.vis)
     # judge model according to HTER
     is_best = valid_args[3] <= best_model_HTER
     best_model_HTER = min(valid_args[3], best_model_HTER)
@@ -60,10 +99,10 @@ def infer(args, config):
 
     best_model_ACC = valid_args[6]
     best_model_AUC = valid_args[4]
-    best_TPR_FPR = valid_args[-2]
+    best_TPR_FPR = valid_args[-3]
             
 
-    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8]
+    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8], valid_args[9]
 
 
 def main(args):
@@ -106,7 +145,7 @@ def main(args):
         f.write('HTER, AUC, TPR@FPR=1%\n')
 
         config.checkpoint = args.ckpt
-        hter, auc, tpr_fpr, true_false_list = infer(args, config)
+        hter, auc, tpr_fpr, true_false_list, attention_maps = infer(args, config)
 
         f.write(f'{hter},{auc},{tpr_fpr}\n')
 
@@ -114,16 +153,10 @@ def main(args):
     output_directory = os.path.join(args.report_logger_path, args.name, output_directory)
     os.makedirs(output_directory, exist_ok=True)
 
-    for image_path in true_false_list:
-        try:
-            img = Image.open(image_path)
-            image_filename = os.path.basename(image_path)
-            
-            output_path = os.path.join(output_directory, image_filename)
-            img.save(output_path)
-            
-        except Exception as e:
-            print(f"Failed to save {image_path}: {e}")
+    print(true_false_list)
+
+    for i, image_path in enumerate(true_false_list):
+        save_image(image_path, attention_maps[i], output_directory)
 
 
 if __name__ == "__main__":

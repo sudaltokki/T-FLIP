@@ -13,7 +13,7 @@ import time
 from utils.utils import time_to_str
 
 
-def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=False):
+def eval(valid_dataloader, model, norm_flag, return_prob=False, vis=False):
     """
     Eval the FAS model on the target data.
     The function evaluates the model on the target data and return TPR@FPR, HTER
@@ -31,7 +31,8 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=F
     output_dict_tmp = {}
     target_dict_tmp = {}
 
-    incorrect_predictions = [] 
+    incorrect_predictions = []
+    incorrect_attention = []
 
     with torch.no_grad():
         for iter, (input, target, videoID, name) in enumerate(valid_dataloader):
@@ -40,7 +41,10 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=F
 
             starttime = time.time()
             # cls_out, feature = model(input, norm_flag) # for FLIP-V and FLIP-IT model
-            cls_out = model.forward_eval(input, norm_flag) # for SSL-CLIP model
+            if vis == True:
+                cls_out, attention_map = model.forward_eval(input, norm_flag) # for SSL-CLIP model
+            else:
+                cls_out = model.forward_eval(input, norm_flag)
 
             prob = F.softmax(cls_out, dim=1).cpu().data.numpy()[:, 1]
             label = target.cpu().data.numpy()
@@ -62,11 +66,15 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=F
                     output_dict_tmp[videoID[i]].append(cls_out[i].view(1, 2))
                     target_dict_tmp[videoID[i]].append(target[i].view(1))
 
-                if debugging_flag:
+                if vis:
                     pred_label = np.argmax(cls_out[i].cpu().data.numpy())
                     true_label = label[i]
                     if pred_label != true_label:
                         incorrect_predictions.append(name[i])
+                        img_attention_map = [attention_map[layer_idx][i, :, :].cpu().data.numpy() 
+                                             for layer_idx in range(len(attention_map))]
+
+                        incorrect_attention.append(img_attention_map)
   
     prob_list = []
     label_list = []
@@ -103,10 +111,10 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=F
     print("TPR@FPR = ", rate)
 
     if not return_prob:
-        if debugging_flag:
+        if vis:
             return [
                 valid_losses.avg, valid_top1.avg, cur_EER_valid, cur_HTER_valid,
-                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions
+                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention
             ]
         else:
             return [
@@ -114,10 +122,10 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, debugging_flag=F
                 auc_score, threshold, ACC_threshold * 100, rate
         ]
     else:
-        if debugging_flag:
+        if vis:
             return [
                 valid_losses.avg, valid_top1.avg, cur_EER_valid, cur_HTER_valid,
-                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions
+                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention
             ], [prob_list, label_list]
         else:
             return [

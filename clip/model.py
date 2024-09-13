@@ -7,7 +7,6 @@ from torch import nn
 from timm import create_model
 
 
-
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -208,7 +207,7 @@ class Transformer(nn.Module):
 
 
 class VisionTransformer(nn.Module):
-    def __init__(self, input_resolution: int, patch_size: int, width: int, layers: int, heads: int, output_dim: int, visualize: False):
+    def __init__(self, input_resolution: int, patch_size: int, width: int, layers: int, heads: int, output_dim: int):
         super().__init__()
         self.input_resolution = input_resolution
         self.output_dim = output_dim
@@ -223,8 +222,6 @@ class VisionTransformer(nn.Module):
 
         self.ln_post = LayerNorm(width)
         self.proj = nn.Parameter(scale * torch.randn(width, output_dim))
-
-        self.vis = visualize
 
     def forward(self, x: torch.Tensor):
         x = self.conv1(x)  # shape = [*, width, grid, grid]
@@ -243,10 +240,7 @@ class VisionTransformer(nn.Module):
         if self.proj is not None:
             x = x @ self.proj
 
-        if self.vis == True:
-            return x, attention_map
-        else:
-            return x
+        return x, attention_map
 
     def forward_full(self, x: torch.Tensor):
         x = self.conv1(x)  # shape = [*, width, grid, grid]
@@ -282,14 +276,11 @@ class CLIP(nn.Module):
                  transformer_width: int,
                  transformer_heads: int,
                  transformer_layers: int,
-                 swin_transformer: False,
-                 visualize = False
+                 swin_transformer: False
                  ):
         super().__init__()
 
         self.context_length = context_length
-        self.visualize = visualize
-
 
         if swin_transformer == True:
             self.visual = create_model('swin_tiny_patch4_window7_224', pretrained=True)
@@ -314,8 +305,7 @@ class CLIP(nn.Module):
                     width=vision_width,
                     layers=vision_layers,
                     heads=vision_heads,
-                    output_dim=embed_dim,
-                    visualize=self.visualize
+                    output_dim=embed_dim
                 )
 
         self.transformer = Transformer(
