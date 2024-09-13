@@ -29,12 +29,14 @@ device = 'cuda'
 def overlay(image, attention_map):
 
     attention_map = attention_map / attention_map.max()
+    cmap = plt.get_cmap('jet')
+    attention_map_colored = cmap(attention_map)[:, :, :3]
 
     image = transforms.ToTensor()(image).permute(1, 2, 0).numpy()
-    attention_map_r = np.array(Image.fromarray(attention_map).resize(image.shape[:2], Image.BILINEAR))
+    attention_map_resized = np.array(Image.fromarray((attention_map_colored * 255).astype(np.uint8)).resize(image.shape[:2], Image.BILINEAR)) / 255
 
-    overlay = image.copy()
-    overlay[:, :, 0] += attention_map_r
+    overlay = (0.5 * image + 0.5 * attention_map_resized)
+    overlay = np.clip(overlay, 0, 1)
 
     return overlay
 
@@ -152,8 +154,6 @@ def main(args):
     output_directory = "debugging_images"
     output_directory = os.path.join(args.report_logger_path, args.name, output_directory)
     os.makedirs(output_directory, exist_ok=True)
-
-    print(true_false_list)
 
     for i, image_path in enumerate(true_false_list):
         save_image(image_path, attention_maps[i], output_directory)
