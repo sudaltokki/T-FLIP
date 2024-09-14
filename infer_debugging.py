@@ -41,12 +41,16 @@ def overlay(image, attention_map):
     return overlay
 
 
-def save_image(path, attention_maps, output_dir):
+def save_image(args, path, attention_maps, type='incorrect'):
 
     try:
         img = Image.open(path).convert("RGB")
         image_filename = os.path.basename(path)
         image_base, _ = os.path.splitext(image_filename)
+
+        output_dir = os.path.join(args.report_logger_path, args.name, type + "_debugging_images")
+        os.makedirs(output_dir, exist_ok=True)
+
 
         image_output_dir = os.path.join(output_dir, image_base)
         os.makedirs(image_output_dir, exist_ok=True)
@@ -101,10 +105,10 @@ def infer(args, config):
 
     best_model_ACC = valid_args[6]
     best_model_AUC = valid_args[4]
-    best_TPR_FPR = valid_args[-3]
+    best_TPR_FPR = valid_args[7]
             
 
-    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8], valid_args[9]
+    return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0, valid_args[8], valid_args[9], valid_args[10], valid_args[11]
 
 
 def main(args):
@@ -147,16 +151,15 @@ def main(args):
         f.write('HTER, AUC, TPR@FPR=1%\n')
 
         config.checkpoint = args.ckpt
-        hter, auc, tpr_fpr, true_false_list, attention_maps = infer(args, config)
+        hter, auc, tpr_fpr, incorrect_list, incorrect_attmaps, correct_list, correct_attmaps = infer(args, config)
 
         f.write(f'{hter},{auc},{tpr_fpr}\n')
 
-    output_directory = "debugging_images"
-    output_directory = os.path.join(args.report_logger_path, args.name, output_directory)
-    os.makedirs(output_directory, exist_ok=True)
+    for i, image_path in enumerate(incorrect_list):
+        save_image(args, image_path, incorrect_attmaps[i], type='incorrect')
 
-    for i, image_path in enumerate(true_false_list):
-        save_image(image_path, attention_maps[i], output_directory)
+    for i, image_path in enumerate(correct_list):
+        save_image(args, image_path, correct_attmaps[i], type='correct')
 
 
 if __name__ == "__main__":

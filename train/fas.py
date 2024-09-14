@@ -540,7 +540,7 @@ class flip_mcl(nn.Module):
         text_features = torch.stack(ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features = self.model.encode_image(input)
+        image_features, _ = self.model.encode_image(input)
 
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
