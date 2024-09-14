@@ -19,6 +19,5 @@ torchrun --nproc_per_node 1 -m \
     --alpha_ckd_loss 0. \
     --alpha_fd_loss 0. \
     --alpha_affinity_loss 0.00001 \
-    --alpha_icl_loss 0.  \
     --name "analyze_msu"  \
     --swin False
