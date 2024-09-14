@@ -34,6 +34,9 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, vis=False):
     incorrect_predictions = []
     incorrect_attention = []
 
+    correct_predictions = []
+    correct_attention = []
+
     with torch.no_grad():
         for iter, (input, target, videoID, name) in enumerate(valid_dataloader):
             input = Variable(input).cuda()
@@ -75,6 +78,13 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, vis=False):
                                              for layer_idx in range(len(attention_map))]
 
                         incorrect_attention.append(img_attention_map)
+                    else:
+                        correct_predictions.append(name[i])
+                        img_attention_map = [attention_map[layer_idx][i, :, :].cpu().data.numpy() 
+                                             for layer_idx in range(len(attention_map))]
+
+                        correct_attention.append(img_attention_map)
+
   
     prob_list = []
     label_list = []
@@ -114,7 +124,7 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, vis=False):
         if vis:
             return [
                 valid_losses.avg, valid_top1.avg, cur_EER_valid, cur_HTER_valid,
-                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention
+                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention, correct_predictions, correct_attention
             ]
         else:
             return [
@@ -125,7 +135,7 @@ def eval(valid_dataloader, model, norm_flag, return_prob=False, vis=False):
         if vis:
             return [
                 valid_losses.avg, valid_top1.avg, cur_EER_valid, cur_HTER_valid,
-                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention
+                auc_score, threshold, ACC_threshold * 100, rate, incorrect_predictions, incorrect_attention, correct_predictions, correct_attention
             ], [prob_list, label_list]
         else:
             return [
