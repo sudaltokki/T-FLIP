@@ -1,9 +1,9 @@
 torchrun --nproc_per_node 1 -m \
-    --master_addr=127.0.0.2 --master_port=28642 \
+    --master_addr=127.0.0.2 --master_port=21222 \
     infer_debugging \
     --t_model ViT-B-16 \
     --model ViT-B-16 \
-    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/msu_flip_mcl.pth.tar"\
+    --t_model_checkpoint "/home/jiwon/FLIP_T_ckpt/replay_flip_mcl.pth.tar"\
     --config M \
     --ckpt "log/msu(b8,it8000)_fd10+rkd_lr0.001/ckpt/flip_mcl_checkpoint_run_0.pth.tar/_checkpoint.pth.tar"\
     --op_dir ckpt \

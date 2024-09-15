@@ -15,8 +15,8 @@ from train.prompt_templates import spoof_templates, real_templates
 from collections import OrderedDict
 from clip.model import CLIP
 
-from utils.loss import HardDarkRank, RkdDistance, RKdAngle, L2Triplet, AttentionTransfer
-
+from utils.rkd_loss import HardDarkRank, RkdDistance, RKdAngle, L2Triplet, AttentionTransfer
+from utils.distkd_loss import DIST
 
 
 def l2_norm(input, axis=1):
@@ -287,13 +287,13 @@ class flip_mcl(nn.Module):
         t_text_features = torch.stack(t_ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features = self.model.encode_image(input)
+        image_features, _ = self.model.encode_image(input)
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)
 
         with torch.no_grad():
-            t_image_features = self.t_model.encode_image(input)
+            t_image_features, _ = self.t_model.encode_image(input)
         # normalized features
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
@@ -317,11 +317,11 @@ class flip_mcl(nn.Module):
 
         # ------------------------------ Image SSL branch -------------------------------- # 
         # Get the image embeddings for the ssl views
-        aug1 = self.model.encode_image(input_view_1) # Bx512
+        aug1, _ = self.model.encode_image(input_view_1) # Bx512
         if self.args.swin == True:
             batch_size, h, w, c = aug1.shape
             aug1 = aug1.view(batch_size, h * w, c)
-        aug2 = self.model.encode_image(input_view_2) # Bx512
+        aug2, _ = self.model.encode_image(input_view_2) # Bx512
         if self.args.swin == True:
             batch_size, h, w, c = aug2.shape
             aug2 = aug2.view(batch_size, h * w, c)
@@ -473,7 +473,14 @@ class flip_mcl(nn.Module):
 
         #----------------------------------------------------------------------------------------------
 
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss
+        distkd_loss = torch.tensor(0.).cuda()
+        if self.args.distkd_ratio > 0 :
+            kd_loss = DIST(beta=1, gamma=1, tau=1)
+            distkd_loss = (kd_loss(logits_per_image, t_logits_per_image.detach()) + kd_loss(logits_per_text, t_logits_per_text.detach())) / 2
+            distkd_loss = self.args.distkd_ratio * distkd_loss
+
+
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class

@@ -164,6 +164,9 @@ def parse_args(args):
                         action=LookupChoices)
 
     parser.add_argument('--triplet_margin', type=float, default=0.2)
+
+    parser.add_argument('--distkd_ratio', type=bool, default=False)
+
     parser.add_argument("--current_time", type=float, default=get_datetime(), help="datetime in Seoul")
 
     # wandb
