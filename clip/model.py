@@ -180,7 +180,7 @@ class ResidualAttentionBlock(nn.Module):
 
     def attention(self, x: torch.Tensor):
         self.attn_mask = self.attn_mask.to(dtype=x.dtype, device=x.device) if self.attn_mask is not None else None
-        return self.attn(x, x, x, need_weights=True, attn_mask=self.attn_mask)
+        return self.attn(x, x, x, need_weights=True, attn_mask=self.attn_mask, average_attn_weights=True)
     
     def forward(self, x: torch.Tensor):
         out, attention_weight = self.attention(self.ln_1(x))

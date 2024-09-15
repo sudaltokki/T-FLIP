@@ -58,8 +58,12 @@ def save_image(args, path, attention_maps, type='incorrect'):
         img.save(os.path.join(image_output_dir, f"{image_base}_original.jpg"))
 
         for idx, attention_map in enumerate(attention_maps):
+            
+            result = torch.eye(197)
+            for att_map in attention_maps[:idx]:
+                result = torch.matmul(torch.tensor(att_map), result)
 
-            overlay_img = overlay(img, attention_map)
+            overlay_img = overlay(img, result)
             plt.imshow(overlay_img)
             overlay_dir = os.path.join(image_output_dir, f"layer_{idx}.jpg")
             plt.savefig(overlay_dir, bbox_inches='tight', pad_inches=0)
