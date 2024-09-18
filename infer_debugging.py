@@ -28,17 +28,23 @@ device = 'cuda'
 
 def overlay(image, attention_map):
 
+    attention_map = attention_map[1:, 1:]
+    attention_map = attention_map.mean(axis=0).reshape(14, 14)
+
     attention_map = attention_map / attention_map.max()
+
     cmap = plt.get_cmap('jet')
     attention_map_colored = cmap(attention_map)[:, :, :3]
 
     image = transforms.ToTensor()(image).permute(1, 2, 0).numpy()
+
     attention_map_resized = np.array(Image.fromarray((attention_map_colored * 255).astype(np.uint8)).resize(image.shape[:2], Image.BILINEAR)) / 255
 
     overlay = (0.5 * image + 0.5 * attention_map_resized)
     overlay = np.clip(overlay, 0, 1)
 
     return overlay
+
 
 
 def save_image(args, path, attention_maps, type='incorrect'):
