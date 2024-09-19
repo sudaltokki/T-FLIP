@@ -165,7 +165,7 @@ def parse_args(args):
 
     parser.add_argument('--triplet_margin', type=float, default=0.2)
 
-    parser.add_argument('--distkd_ratio', type=bool, default=False)
+    parser.add_argument('--distkd_ratio', type=float, default=0.)
 
     parser.add_argument("--current_time", type=float, default=get_datetime(), help="datetime in Seoul")
 

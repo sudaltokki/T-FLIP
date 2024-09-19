@@ -17,6 +17,9 @@ from utils.dataset import get_dataset_one_to_one_ssl_clip , get_dataset_ssl_clip
 
 from train.fas import flip_mcl
 
+# pip install 'git+https://github.com/katsura-jp/pytorch-cosine-annealing-with-warmup'
+from cosine_annealing_warmup import CosineAnnealingWarmupRestarts
+
 
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
@@ -147,7 +150,19 @@ def train(config, args):
     total_steps = total_steps * iteration
 
     if args.scheduler == 'cosine':
-        scheduler = CosineAnnealingLR(optimizer, total_steps)
+        #scheduler = CosineAnnealingLR(optimizer, total_steps)
+        scheduler = CosineAnnealingLR(optimizer, iteration)
+    elif args.scheduler == 'cosinerestart':
+        print(args.scheduler)
+        scheduler = CosineAnnealingWarmupRestarts(
+                        optimizer,
+                        first_cycle_steps=2000,  # 2000 iterations마다 리셋
+                        cycle_mult=1.0,          # 주기 길이 고정
+                        max_lr=args.lr,              # 최대 학습률
+                        min_lr=args.lr/100,            # 최소 학습률
+                        warmup_steps=500,        # 처음 500 iterations 동안 warmup
+                        gamma=0.8                # 리셋 시 최대 학습률을 0.8배로 감소
+                    )
 
   
     for iter_num in range(iter_num_start, iteration + 1):
@@ -356,7 +371,7 @@ def train(config, args):
         if (iter_num+1) % accumulation_step == 0:
             optimizer.step()
             optimizer.zero_grad()
-            if args.scheduler == 'cosine':
+            if args.scheduler != "":
                 scheduler.step()
 
         loss_classifier.update(cls_loss.item())
@@ -408,6 +423,6 @@ def train(config, args):
 
             time.sleep(0.01)
             if args.set_wandb:
-                wandb.log({'SimCLR-loss' : loss_simclr.avg, 'l2-loss' : loss_l2_euclid.avg, 'total-loss': loss_total.avg, 'fd_loss': loss_fd.avg, 'ckd_loss': loss_ckd.avg, 'affinity_loss':loss_affinity.avg, 'rkd_loss': loss_rkd.avg, 'distkd_loss': loss_distkd.avg, 'valid_loss': valid_args[0], 'top-1':valid_args[6], 'HTER':valid_args[3] * 100, 'AUC':valid_args[4] * 100, 'classifier_loss':loss_classifier.avg, 'classifier_top1': classifer_top1.avg})
+                wandb.log({'SimCLR-loss' : loss_simclr.avg, 'l2-loss' : loss_l2_euclid.avg, 'total-loss': loss_total.avg, 'fd_loss': loss_fd.avg, 'ckd_loss': loss_ckd.avg, 'affinity_loss':loss_affinity.avg, 'rkd_loss': loss_rkd.avg, 'distkd_loss': loss_distkd.avg, 'valid_loss': valid_args[0], 'top-1':valid_args[6], 'HTER':valid_args[3] * 100, 'AUC':valid_args[4] * 100, 'classifier_loss':loss_classifier.avg, 'classifier_top1': classifer_top1.avg, 'learning_rate':optimizer.param_groups[0]['lr'], 'TPR@FPR=1%':valid_args[7]})
 
     return best_model_HTER*100.0, best_model_AUC*100.0, best_TPR_FPR*100.0
