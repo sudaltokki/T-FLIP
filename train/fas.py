@@ -425,6 +425,7 @@ class flip_mcl(nn.Module):
             image_features = image_features / image_features.norm(dim=-1, keepdim=True)
             text_features = text_features / text_features.norm(dim=-1, keepdim=True) 
 
+
         fd_loss = torch.tensor(0.).cuda()
         if self.args.alpha_fd_loss > 0:
             #fd_loss = F.mse_loss(image_features, t_image_features) + F.mse_loss(text_features, t_text_features)
@@ -462,8 +463,8 @@ class flip_mcl(nn.Module):
                 
             gd_loss = self.args.alpha_gd_loss * gd_loss
 
-        #------------------------------------------RKD Loss---------------------------------------------------
-        
+        #------------------------------------------RKD Loss---------------------------------------------------   
+
         triplet_loss = torch.tensor(0.).cuda()
         if self.args.triplet_ratio > 0 :
             triplet_criterion = L2Triplet(sampler=self.args.triplet_sample(), margin=self.args.triplet_margin)

@@ -1,5 +1,5 @@
 torchrun --nproc_per_node 1 -m \
-    --master_addr=127.0.0.2 --master_port=29455 \
+    --master_addr=127.0.0.2 --master_port=29019 \
     train.main_kd \
     --t_model ViT-B-16 \
     --model ViT-T-16 \
@@ -9,20 +9,20 @@ torchrun --nproc_per_node 1 -m \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
-    --iterations 9000 \
+    --iterations 8000 \
     --epochs 300 \
     --run 3 \
     --batch_size 8 \
     --total_batch_size 8 \
     --t_batch_size 30 \
-    --lr=0.001 \
+    --lr=0.0001 \
     --wd=0.1 \
-    --alpha_cls_loss 2. \
-    --alpha_sim_loss 0.3 \
-    --alpha_l2_loss 100. \
-    --alpha_ckd_loss 0. \
+    --scheduler 'cosine' \
+    --alpha_cls_loss 0. \
+    --alpha_l2_loss 0. \
+    --alpha_sim_loss 0. \
     --distkd_ratio 1. \
-    --name "msu(b8,it9000,run3)_distkd_lr0.001_try2"  \
+    --name "msu(b8,it8000,run3)_onlydistkd_lr0.0001_cosine_testttt"  \
     --swin False \
     --set_wandb True \
     --user jiwon
