@@ -144,6 +144,7 @@ def parse_args(args):
     parser.add_argument("--alpha_fd_loss", type=float, default=0., help="FD loss weight")
     parser.add_argument("--alpha_affinity_loss", type=float, default=0., help="affinity loss weight")
     parser.add_argument("--alpha_gd_loss", type=float, default=0., help="gradient loss weight")
+    parser.add_argument("--attn_ratio", type=float, default=0., help="attention loss weight")
 
     parser.add_argument('--triplet_ratio', default=0, type=float)
     parser.add_argument('--dist_ratio', default=0, type=float)

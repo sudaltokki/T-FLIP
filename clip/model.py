@@ -363,6 +363,7 @@ class CLIP(nn.Module):
 
     def build_attention_mask(self):
         # lazily create causal attention mask, with full attention between the vision tokens
+        # pytorch uses additive attention mask; fill with -inf
         mask = torch.empty(self.context_length, self.context_length)
         mask.fill_(float("-inf"))
         mask.triu_(1)  # zero out the lower diagonal
@@ -370,10 +371,16 @@ class CLIP(nn.Module):
 
     @property
     def dtype(self):
+        # Use head if exists, otherwise use conv1 for ViT or swin models
         if hasattr(self.visual, 'head'):
             return self.visual.head.weight.dtype
         elif hasattr(self.visual, 'conv1'):
             return self.visual.conv1.weight.dtype
+    '''
+    @property
+    def dtype(self):
+        return self.visual.conv1.weight.dtype
+    '''
 
     def encode_image(self, image):
         return self.visual(image.type(self.dtype))
@@ -386,6 +393,8 @@ class CLIP(nn.Module):
         x, _, _ = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
         x = self.ln_final(x).type(self.dtype)
+        # x.shape = [batch_size, n_ctx, transformer.width]
+        # take features from the eot embedding (eot_token is the highest number in each sequence)
         x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
         return x
 
@@ -402,6 +411,7 @@ class CLIP(nn.Module):
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
 
+        # shape = [global_batch_size, global_batch_size]
         return logits_per_image, logits_per_text
 
 

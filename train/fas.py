@@ -287,13 +287,13 @@ class flip_mcl(nn.Module):
         t_text_features = torch.stack(t_ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features, _, inter_fts = self.model.encode_image(input)
+        image_features, attention_weight, inter_fts = self.model.encode_image(input)
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)
 
         with torch.no_grad():
-            t_image_features, _, t_inter_fts = self.t_model.encode_image(input)
+            t_image_features, t_attention_weight, t_inter_fts = self.t_model.encode_image(input)
 
         patch_fts = []
         t_patch_fts = []
@@ -546,12 +546,21 @@ class flip_mcl(nn.Module):
 
             afd_loss = loss_ce + self.args.afd_alpha * loss_kl + self.args.afd_beta * loss_kd
 
+        #------------------------------------------attention distillation------------------------------------------------
 
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, afd_loss
+        attn_loss = torch.tensor(0.).cuda()
+        if self.args.attn_ratio > 0:
+            for i in range(12):
+                s_attn = attention_weight[i][:, 1:, 1:]
+                t_attn = t_attention_weight[i][:, 1:, 1:]
+                attn_loss += F.mse_loss(s_attn, t_attn)
 
+            attn_loss *= self.args.attn_ratio
 
+        #----------------------------------------------------------------------------------------------------------------
 
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, afd_loss
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, afd_loss, attn_loss
+
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class
