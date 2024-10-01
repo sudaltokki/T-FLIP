@@ -71,14 +71,14 @@ def train(config, args):
     loss_gd = AverageMeter()
     loss_rkd = AverageMeter()
     loss_distkd = AverageMeter()
-
+    loss_attn = AverageMeter()
 
     logging.info('\n----------------------------------------------- [START %s] %s' %
         (args.current_time.strftime('%Y-%m-%d %H:%M:%S'), '-' * 51))
     logging.info('** start training target model! **')
-    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss---------------------|----- RKD loss -----|----- DIST_KD loss -----|-------- Current Best --------|--------------|')
-    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity     gd   |      rkd_loss      |      distkd_loss       |    top-1    HTER     AUC     |     time     |')
-    logging.info('-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
+    logging.info('--------|------------- VALID -------------|--- classifier ---|-----------------SimCLR loss-------------|-----------------KD loss---------------------|----- RKD loss -----|---- Attention loss ---|-------- Current Best --------|--------------|')
+    logging.info('  iter  |   loss   top-1   HTER    AUC    |   loss   top-1   |  SimCLR-loss    l2-loss    total-loss   |    fd_loss    ckd_loss    affinity     gd   |      rkd_loss      |       attn_loss       |    top-1    HTER     AUC     |     time     |')
+    logging.info('------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|')
     
     start = timer()
     criterion = {'softmax': nn.CrossEntropyLoss().cuda()}
@@ -340,7 +340,7 @@ def train(config, args):
         accumulation_step = int(args.total_batch_size / args.batch_size)
 
         # output image feature + text feature
-        classifier_label_out , logits_ssl, labels_ssl, l2_euclid_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss = model(input_data, input_data_view_1, input_data_view_2, source_label, True) # ce on I-T, SSL for image and l2 loss for image-view-text dot product
+        classifier_label_out , logits_ssl, labels_ssl, l2_euclid_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, attn_loss = model(input_data, input_data_view_1, input_data_view_2, source_label, True) # ce on I-T, SSL for image and l2 loss for image-view-text dot product
         cls_loss = criterion['softmax'](classifier_label_out.narrow(0, 0, input_data.size(0)), source_label)
         cls_loss = args.alpha_cls_loss * cls_loss
 
@@ -350,7 +350,7 @@ def train(config, args):
         l2_euclid_loss = args.alpha_l2_loss * l2_euclid_loss
 
 
-        total_loss = cls_loss + sim_loss + l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + gd_loss + rkd_loss + distkd_loss
+        total_loss = cls_loss + sim_loss + l2_euclid_loss + fd_loss + ckd_loss + affinity_loss + gd_loss + rkd_loss + distkd_loss + attn_loss
 
         total_loss.backward()
         if (iter_num+1) % accumulation_step == 0:
@@ -369,6 +369,7 @@ def train(config, args):
         loss_gd.update(gd_loss.item())
         loss_rkd.update(rkd_loss.item())
         loss_distkd.update(distkd_loss.item())
+        loss_attn.update(attn_loss.item())
 
         acc = accuracy(
             classifier_label_out.narrow(0, 0, input_data.size(0)),
@@ -403,7 +404,7 @@ def train(config, args):
                     valid_args[0], valid_args[6], valid_args[3] * 100, valid_args[4] * 100, 
                     loss_classifier.avg, classifer_top1.avg,
                     loss_simclr.avg, loss_l2_euclid.avg, loss_total.avg,
-                    loss_fd.avg, loss_ckd.avg, loss_affinity.avg, loss_gd.avg, loss_rkd.avg, loss_distkd.avg,
+                    loss_fd.avg, loss_ckd.avg, loss_affinity.avg, loss_gd.avg, loss_rkd.avg, loss_attn.avg,
                     float(best_model_ACC), float(best_model_HTER * 100), float(best_model_AUC * 100), time_to_str(timer() - start, 'min'), 0))
 
             time.sleep(0.01)
