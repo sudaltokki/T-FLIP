@@ -141,10 +141,15 @@ class ModifiedResNet(nn.Module):
 
         x = x.type(self.conv1.weight.dtype)
         x = stem(x)
+
         x = self.layer1(x)
+
         x = self.layer2(x)
+
         x = self.layer3(x)
+  
         x = self.layer4(x)
+
         x = self.attnpool(x)
 
         return x
@@ -198,12 +203,14 @@ class Transformer(nn.Module):
 
     def forward(self, x: torch.Tensor):
         attention_map = []
+        inter_fts = []
 
         for resblock in self.resblocks:
             x, attn_weights = resblock(x)
+            inter_fts.append(x)
             attention_map.append(attn_weights)
 
-        return x, attention_map
+        return x, attention_map, inter_fts
 
 
 class VisionTransformer(nn.Module):
@@ -232,7 +239,7 @@ class VisionTransformer(nn.Module):
         x = self.ln_pre(x)
 
         x = x.permute(1, 0, 2)  # NLD -> LND
-        x, attention_map = self.transformer(x)
+        x, attention_map, inter_fts = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
 
         x = self.ln_post(x[:, 0, :])
@@ -240,7 +247,7 @@ class VisionTransformer(nn.Module):
         if self.proj is not None:
             x = x @ self.proj
 
-        return x, attention_map
+        return x, attention_map, inter_fts
 
     def forward_full(self, x: torch.Tensor):
         x = self.conv1(x)  # shape = [*, width, grid, grid]
@@ -297,7 +304,7 @@ class CLIP(nn.Module):
                     input_resolution=image_resolution,
                     width=vision_width
                 )
-            else:  # here
+            else:
                 vision_heads = vision_width // 64
                 self.visual = VisionTransformer(
                     input_resolution=image_resolution,
@@ -356,25 +363,18 @@ class CLIP(nn.Module):
 
     def build_attention_mask(self):
         # lazily create causal attention mask, with full attention between the vision tokens
-        # pytorch uses additive attention mask; fill with -inf
         mask = torch.empty(self.context_length, self.context_length)
         mask.fill_(float("-inf"))
         mask.triu_(1)  # zero out the lower diagonal
         return mask
 
-
     @property
     def dtype(self):
-        # Use head if exists, otherwise use conv1 for ViT or swin models
         if hasattr(self.visual, 'head'):
             return self.visual.head.weight.dtype
         elif hasattr(self.visual, 'conv1'):
             return self.visual.conv1.weight.dtype
-    '''
-    @property
-    def dtype(self):
-        return self.visual.conv1.weight.dtype
-'''
+
     def encode_image(self, image):
         return self.visual(image.type(self.dtype))
 
@@ -383,14 +383,10 @@ class CLIP(nn.Module):
 
         x = x + self.positional_embedding.type(self.dtype)
         x = x.permute(1, 0, 2)  # NLD -> LND
-        x, _ = self.transformer(x)
+        x, _, _ = self.transformer(x)
         x = x.permute(1, 0, 2)  # LND -> NLD
         x = self.ln_final(x).type(self.dtype)
-
-        # x.shape = [batch_size, n_ctx, transformer.width]
-        # take features from the eot embedding (eot_token is the highest number in each sequence)
         x = x[torch.arange(x.shape[0]), text.argmax(dim=-1)] @ self.text_projection
-
         return x
 
     def forward(self, image, text):
@@ -406,8 +402,8 @@ class CLIP(nn.Module):
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logits_per_image.t()
 
-        # shape = [global_batch_size, global_batch_size]
         return logits_per_image, logits_per_text
+
 
 
 def convert_weights(model: nn.Module):
