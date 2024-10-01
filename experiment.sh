@@ -9,7 +9,7 @@ torchrun --nproc_per_node 1 -m \
     --report_logger_path log \
     --root "/nas/dataset/FLIP_Dataset/MCIO/frame/"\
     --dataroot "/nas/dataset/FLIP_Dataset/MCIO/txt/"\
-    --epochs 300 \
+    --iterations 8000 \
     --batch_size 8 \
     --t_batch_size 30 \
     --lr=0.000001 \
