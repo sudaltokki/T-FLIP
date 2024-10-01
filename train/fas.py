@@ -17,7 +17,7 @@ from clip.model import CLIP
 
 from utils.rkd_loss import HardDarkRank, RkdDistance, RKdAngle, L2Triplet, AttentionTransfer
 from utils.distkd_loss import DIST
-
+from utils.AFD import AFD
 
 def l2_norm(input, axis=1):
     norm = torch.norm(input, 2, axis, True)
@@ -287,13 +287,36 @@ class flip_mcl(nn.Module):
         t_text_features = torch.stack(t_ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features, attention_weight = self.model.encode_image(input)
+        image_features, attention_weight, inter_fts = self.model.encode_image(input)
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)
 
         with torch.no_grad():
-            t_image_features, t_attention_weight = self.t_model.encode_image(input)
+            t_image_features, t_attention_weight, t_inter_fts = self.t_model.encode_image(input)
+
+        patch_fts = []
+        t_patch_fts = []
+
+        for i in range (12):
+            # inter_fts는 (197, 64, 192) 형태이므로 (64, 192, 14, 14)로 변환
+            inter_fts_i = inter_fts[i]  # 마지막 레이어 피처 사용
+            _, b, w = inter_fts_i.shape  # (197, 64, 192)
+
+            # CLS 토큰을 제외한 나머지 196개 패치만을 사용하여 reshape
+            patch_fts_i = inter_fts_i[1:, :, :] # (196, 64, 192) 형태, CLS 제외
+            patch_fts_i = patch_fts_i.permute(1, 2, 0).contiguous()  # (64, 192, 196)로 변환
+            patch_fts_i = patch_fts_i.view(b, w, 14, 14)  # (64, 192, 14, 14)로 변환
+            patch_fts.append(patch_fts_i)
+
+            t_inter_fts_i = t_inter_fts[i]  # 마지막 레이어 피처 사용
+            _, t_b, t_w = t_inter_fts_i.shape  # (197, 64, 768)
+            # CLS 토큰을 제외한 나머지 196개 패치만을 사용하여 reshape
+            t_patch_fts_i = t_inter_fts_i[1:, :, :] # (196, 64, 768) 형태, CLS 제외
+            t_patch_fts_i = t_patch_fts_i.permute(1, 2, 0).contiguous()  # (64, 768, 196)로 변환
+            t_patch_fts_i = t_patch_fts_i.view(t_b, t_w, 14, 14)  # (64, 768, 14, 14)로 변환
+            t_patch_fts.append(patch_fts_i)
+
         # normalized features
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
@@ -317,11 +340,11 @@ class flip_mcl(nn.Module):
 
         # ------------------------------ Image SSL branch -------------------------------- # 
         # Get the image embeddings for the ssl views
-        aug1, _ = self.model.encode_image(input_view_1) # Bx512
+        aug1, _, _ = self.model.encode_image(input_view_1) # Bx512
         if self.args.swin == True:
             batch_size, h, w, c = aug1.shape
             aug1 = aug1.view(batch_size, h * w, c)
-        aug2, _ = self.model.encode_image(input_view_2) # Bx512
+        aug2, _, _ = self.model.encode_image(input_view_2) # Bx512
         if self.args.swin == True:
             batch_size, h, w, c = aug2.shape
             aug2 = aug2.view(batch_size, h * w, c)
@@ -479,6 +502,50 @@ class flip_mcl(nn.Module):
             distkd_loss = (kd_loss(logits_per_image, t_logits_per_image.detach()) + kd_loss(logits_per_text, t_logits_per_text.detach())) / 2
             distkd_loss = self.args.distkd_ratio * distkd_loss
 
+        #---------------------------------------------AFD loss-------------------------------------------------
+
+        afd_loss = torch.tensor(0.).cuda()
+
+        def unique_shape(s_shapes):
+            n_s = []
+            unique_shapes = []
+            n = -1
+            for s_shape in s_shapes:
+                if s_shape not in unique_shapes:
+                    unique_shapes.append(s_shape)
+                    n += 1
+                n_s.append(n)
+            return n_s, unique_shapes
+        
+        if self.args.afd_ratio > 0 :
+
+            self.args.guide_layers = np.arange(0, 12)
+            self.args.hint_layers = np.arange(0, 12)
+            
+            self.args.s_shapes = [patch_fts[i].size() for i in range(12)]
+            self.args.t_shapes = [t_patch_fts[i].size() for i in range(12)]
+            self.args.n_t, self.args.unique_t_shapes = unique_shape(self.args.t_shapes)
+
+            criterion_c = nn.CrossEntropyLoss()
+            criterion_k = DistillKL(T=self.args.afd_temperature)
+            criterion_d = AFD(self.args)
+
+            criterion = nn.ModuleList([])
+            criterion.append(criterion_c)
+            criterion.append(criterion_k)
+            criterion.append(criterion_d)
+
+            criterion_ce, criterion_kl, criterion_kd = criterion
+
+            with torch.no_grad():
+                t_patch_fts = [f.detach() for f in t_patch_fts]
+
+            loss_ce = criterion_ce(logits_per_image, source_labels)
+            loss_kl = criterion_kl(logits_per_image, t_logits_per_image)
+            loss_kd = criterion_kd(patch_fts, t_patch_fts)
+
+            afd_loss = loss_ce + self.args.afd_alpha * loss_kl + self.args.afd_beta * loss_kd
+
         #------------------------------------------attention distillation------------------------------------------------
 
         attn_loss = torch.tensor(0.).cuda()
@@ -492,8 +559,8 @@ class flip_mcl(nn.Module):
 
         #----------------------------------------------------------------------------------------------------------------
 
+        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, afd_loss, attn_loss
 
-        return similarity, logits_ssl, labels_ssl, dot_product_loss, fd_loss, ckd_loss, affinity_loss, gd_loss, rkd_loss, distkd_loss, attn_loss
 
     def forward_eval(self, input, norm_flag=True):
         # single text prompt per class
@@ -518,9 +585,9 @@ class flip_mcl(nn.Module):
 
         # get the image features
         if self.args.vis == True:
-            image_features, attention_map = self.model.encode_image(input)
+            image_features, attention_map, _ = self.model.encode_image(input)
         else:
-            image_features, _ = self.model.encode_image(input)
+            image_features, _, _ = self.model.encode_image(input)
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape
             image_features = image_features.view(batch_size, h * w, c)
@@ -560,7 +627,7 @@ class flip_mcl(nn.Module):
         text_features = torch.stack(ensemble_weights, dim=0).cuda()
 
         # get the image features
-        image_features, _ = self.model.encode_image(input)
+        image_features, _, _ = self.model.encode_image(input)
 
         if self.args.swin == True:
             batch_size, h, w, c = image_features.shape

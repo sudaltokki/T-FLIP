@@ -1,4 +1,5 @@
 import argparse
+import numpy as np
 
 from utils.utils import get_datetime
 import utils.pairsampler as pair
@@ -167,6 +168,14 @@ def parse_args(args):
     parser.add_argument('--triplet_margin', type=float, default=0.2)
 
     parser.add_argument('--distkd_ratio', type=bool, default=False)
+
+    parser.add_argument('--afd_ratio', type=bool, default=False)
+    parser.add_argument('--afd_alpha', default=0.9, type=float, help='weight for KD (Hinton)')
+    parser.add_argument('--afd_temperature', default=4, type=float)
+    parser.add_argument('--afd_beta', default=200, type=float)
+    parser.add_argument('--qk_dim', default=128, type=int)
+
+
 
     parser.add_argument("--current_time", type=float, default=get_datetime(), help="datetime in Seoul")
 
