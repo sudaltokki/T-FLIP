@@ -3,8 +3,8 @@ This repository contains the source code for the knowledge distillation of a fin
 
 ## DEMO
 
-실험물 시연은 다음 CoLAB 링크를 통해 별도의 서버 환경 구축 없이 간편하게 할 수 있다.
-(코랩시연방법)
+실험물 시연은 다음 Google Colaboratory를 통해 별도의 서버 환경 구축 없이 간편하게 할 수 있습니다. 아래 md 파일을 참고해주세요.  
+시연방법: [readme_for_infer.md](https://github.com/sudaltokki/T-FLIP/blob/main/readme_for_infer.md)
 
 ## Dataset Preparation
 
