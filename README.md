@@ -5,6 +5,16 @@ This repository contains the source code for the knowledge distillation of a fin
 ## Dataset Preparation
 
 ### FLIP MCIO Dataset
+
+Each dataset was obtained from the following sources. 
+The datasets, except for M and CelebA, can be accessed through approval.
+
+MSU-MFSD (M) : https://github.com/sunny3/MSU-MFSD.git
+CASIA-MFSD (C) : http://www.cbsr.ia.ac.cn/users/jjyan/zhang-icb2012.pdf
+Replay-Attack (I) : https://www.idiap.ch/en/scientific-research/data/replayattack
+OULU-NPU (O) : https://sites.google.com/site/oulunpudatabase/
+CelebA : https://github.com/ZhangYuanhan-AI/CelebA-Spoof
+
 We use the FLIP MCIO dataset for our experiments. Ensure the dataset is structured correctly and placed in the specified directories.
 
    ```
