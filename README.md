@@ -86,7 +86,7 @@ python infer.py \
     --ckpt /home/jiwon/FLIP_yy/student/t_ckpt/oulu_flip_mcl.pth.tar
 ```
 
-The inference results can be found in the *log* directory.
+The inference results can be found in the *log directory*.
 
 ## Knowledge Distillation (Train Student Model)
 
