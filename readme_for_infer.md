@@ -1,5 +1,5 @@
 # 코드 실행 방법
-> 자세한 시연 방법은 영상를 통해 확인하실 수 있습니다.
+> 자세한 시연 방법은 영상를 통해 확인하실 수 있습니다. https://www.youtube.com/watch?v=j8_Td0Y5yyQ
 
 ### 1. 아래 Google Drive 링크에 들어가기
 https://drive.google.com/drive/folders/1fj_SN4qVevYd7wWtnn5GvXwIhnmntiBY?usp=sharing
