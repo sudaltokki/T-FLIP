@@ -99,14 +99,15 @@ You can modify the parameter values in `experiment.sh`
 --root "/home/jiwon/Dataset/FLIP_Dataset/MCIO/frame/" \
 --dataroot "/home/jiwon/Dataset/FLIP_Dataset/MCIO/txt/" \
 --epochs 100 \
---batch_size 3 \
+--batch_size 8 \
 --t_batch_size 30 \
 --lr=0.000001 \
 --alpha_ckd_loss 0. \
 --alpha_fd_loss 0. \
---alpha_affinity_loss 0. \
---alpha_icl_loss 0.
-```
+--alpha_affinity_loss 0 \
+--alpha_gd_loss 0.  \
+--name test  \
+--swin True
 
 ## Configuration Details
 
