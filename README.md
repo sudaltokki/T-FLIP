@@ -1,6 +1,9 @@
 # FLIP-KD
 This repository contains the source code for the knowledge distillation of a fine-tuned CLIP model (FLIP) for the FAS (Face Anti-Spoofing) task.
 
+## DEMO
+
+실험물 시연은 다음 CoLAB 링크를 통해 별도의 서버 환경 구축 없이 간편하게 할 수 있다.
 
 ## Dataset Preparation
 
